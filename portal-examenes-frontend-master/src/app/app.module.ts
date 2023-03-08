@@ -24,6 +24,7 @@ import { DashboardComponent } from './pages/admin/dashboard/dashboard.component'
 import { UserDashboardComponent } from './pages/user/user-dashboard/user-dashboard.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ChangePasswordAfterLoginComponent } from './pages/change-password-after-login/change-password-after-login.component';
+import { ChangePassNoLoginComponent } from './pages/change-pass-no-login/change-pass-no-login.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { ChangePasswordAfterLoginComponent } from './pages/change-password-after
     DashboardComponent,
     UserDashboardComponent,
     ProfileComponent,
-    ChangePasswordAfterLoginComponent
+    ChangePasswordAfterLoginComponent,
+    ChangePassNoLoginComponent
   ],
   imports: [
     BrowserModule,

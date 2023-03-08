@@ -10,7 +10,12 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class LoginService {
+  private URL = "http://localhost:8080";
   private eURL = "http://localhost:8080/eliminarUsuario";
+  private rURL = "http://localhost:8080/recover-password";
+  private rqURL = "http://localhost:8080/requestNewPassword";
+
+
   public loginStatusSubjec = new Subject<boolean>();
 
   constructor(private http:HttpClient) { }

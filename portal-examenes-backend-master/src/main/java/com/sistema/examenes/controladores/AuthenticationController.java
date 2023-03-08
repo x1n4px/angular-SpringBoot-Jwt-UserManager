@@ -7,7 +7,9 @@ import com.sistema.examenes.modelo.Usuario;
 import com.sistema.examenes.repositorios.UsuarioRepository;
 import com.sistema.examenes.servicios.UsuarioService;
 import com.sistema.examenes.servicios.impl.UserDetailsServiceImpl;
+import org.apache.tomcat.util.buf.B2CConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,15 +22,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @CrossOrigin("*")
 public class AuthenticationController {
-
+    BCryptPasswordEncoder encoder2 = new BCryptPasswordEncoder();
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -45,18 +44,23 @@ public class AuthenticationController {
 
     @PostMapping("/generate-token")
     public ResponseEntity<?> generarToken(@RequestBody JwtRequest jwtRequest) throws Exception {
-
-        try{
-            autenticar(jwtRequest.getUsername(),jwtRequest.getPassword());
-        }catch (Exception exception){
-            exception.printStackTrace();
-            throw new Exception("Usuario no encontrado");
+        Usuario usuario = usuarioService.obtenerUsuario(jwtRequest.getUsername());
+        if (!encoder2.matches(jwtRequest.getPassword(), usuario.getPassword())) {
+            return ResponseEntity.badRequest().body("Incorrect current password");
         }
 
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(jwtRequest.getUsername(), usuario.getPassword()));
+        } catch (DisabledException exception) {
+            throw new Exception("USUARIO DESHABILITADO " + exception.getMessage());
+        } catch (BadCredentialsException e) {
+            throw new Exception("Credenciales invalidas autenticadas" );
+        }
         UserDetails userDetails =  this.userDetailsService.loadUserByUsername(jwtRequest.getUsername());
         String token = this.jwtUtils.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
     }
+
 
     private void autenticar(String username,String password) throws Exception {
         try{
@@ -67,6 +71,7 @@ public class AuthenticationController {
             throw  new Exception("Credenciales invalidas " + e.getMessage());
         }
     }
+
 
     @GetMapping("/actual-usuario")
     public Usuario obtenerUsuarioActual(Principal principal){
@@ -107,6 +112,15 @@ public class AuthenticationController {
         usuarioService.guardarClave(usuario);
         return ResponseEntity.ok("Password changed succesfully");
     }
+
+
+
+
+
+    private void sendEmailWithPassword(String email, String password) {
+        // Implement your logic to send an email with the password to the user
+    }
+
 
 
     @GetMapping("/profile")

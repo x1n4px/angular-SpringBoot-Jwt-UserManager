@@ -9,6 +9,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ChangePasswordAfterLoginComponent } from './pages/change-password-after-login/change-password-after-login.component';
+import { ChangePassNoLoginComponent } from './pages/change-pass-no-login/change-pass-no-login.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,11 @@ const routes: Routes = [
     component : ChangePasswordAfterLoginComponent,
     pathMatch : 'full'
   },
+ {
+  path : 'change-password-no-login',
+  component : ChangePassNoLoginComponent,
+  pathMatch : 'full'
+ } ,
   {
     path:'admin',
     component:DashboardComponent,
@@ -46,7 +52,7 @@ const routes: Routes = [
   {
     path : 'profile',
     component : ProfileComponent,
-    pathMatch : 'full'
+    pathMatch : 'full',
   }
 ];
 

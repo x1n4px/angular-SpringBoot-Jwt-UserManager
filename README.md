@@ -25,5 +25,5 @@
 - [x] Añadir cambiar contraseña post-login (cifrada)
 - [x] Añadir vista gestión usuario (vista admin)
 - [x] Añadir eliminar usuario (vista admin)
-- [ ] Añadir modificar usuasrio (vista admin)
+- [ ] Añadir modificar usuario (vista admin)
 - [x] Añadir cambiar contraseña pre-login (generar contraseña cifrada y enviar por email)

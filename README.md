@@ -25,5 +25,26 @@
 - [x] Añadir cambiar contraseña post-login (cifrada)
 - [x] Añadir vista gestión usuario (vista admin)
 - [x] Añadir eliminar usuario (vista admin)
-- [ ] Añadir modificar usuario (vista admin)
+- [x] Añadir modificar usuario (vista admin)
 - [x] Añadir cambiar contraseña pre-login (generar contraseña cifrada y enviar por email)
+
+
+#JUnit
+
+crear usuario
+crear usuario sin username/email/password
+iniciar sesion
+iniciar sesion con email
+iniciar sesión con email no valido
+iniciar sesión sin email
+iniciar con datos vacios
+
+registrar usuario
+registrar sin datos
+registrar datos inválidos
+
+modificar usuario
+modificar usuario con datos invalidos
+
+borrar usuario
+borrar autousuario

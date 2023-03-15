@@ -24,14 +24,20 @@ public class Usuario implements UserDetails {
     private String email;
     private String telefono;
     private boolean enabled = true;
-    private String perfil;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "usuario")
-    @JsonIgnore
-    private Set<UsuarioRol> usuarioRoles = new HashSet<>();
+    private String rolAsignado;
 
-    public Usuario(){
 
+    public Usuario() {
+
+    }
+
+    public String getRolAsignado() {
+        return rolAsignado;
+    }
+
+    public void setRolAsignado(String rolAsignado) {
+        this.rolAsignado = rolAsignado;
     }
 
     public Usuario(Long id, String username, String password, String nombre, String apellido, String email, String telefono, boolean enabled, String perfil) {
@@ -43,7 +49,6 @@ public class Usuario implements UserDetails {
         this.email = email;
         this.telefono = telefono;
         this.enabled = enabled;
-        this.perfil = perfil;
     }
 
     public Long getId() {
@@ -77,13 +82,10 @@ public class Usuario implements UserDetails {
         this.username = username;
     }
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<Authority> autoridades = new HashSet<>();
-        this.usuarioRoles.forEach(usuarioRol -> {
-            autoridades.add(new Authority(usuarioRol.getRol().getRolNombre()));
-        });
-        return autoridades;
+        return null;
     }
 
     public String getPassword() {
@@ -134,19 +136,5 @@ public class Usuario implements UserDetails {
         this.enabled = enabled;
     }
 
-    public String getPerfil() {
-        return perfil;
-    }
 
-    public void setPerfil(String perfil) {
-        this.perfil = perfil;
-    }
-
-    public Set<UsuarioRol> getUsuarioRoles() {
-        return usuarioRoles;
-    }
-
-    public void setUsuarioRoles(Set<UsuarioRol> usuarioRoles) {
-        this.usuarioRoles = usuarioRoles;
-    }
 }

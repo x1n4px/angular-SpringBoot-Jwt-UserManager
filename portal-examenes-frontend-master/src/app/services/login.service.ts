@@ -14,6 +14,8 @@ export class LoginService {
   private eURL = "http://localhost:8080/eliminarUsuario";
   private rURL = "http://localhost:8080/recover-password";
   private rqURL = "http://localhost:8080/requestNewPassword";
+  private gUURL = "http://localhost:8080/user";
+
 
 
   public loginStatusSubjec = new Subject<boolean>();
@@ -42,9 +44,13 @@ export class LoginService {
     return this.http.post<any>("http://localhost:8080/changePass", body);
   }
 
+  obtenerUsuarioPorId(id:number):Observable<User>{
+    return this.http.get<User>(`${this.gUURL}/${id}`);
+  }
 
-
-
+  actualizarUsuario(id:number, usuario:User) : Observable<Object>{
+    return this.http.put(`${this.gUURL}/${id}`, usuario);
+  }
 
 
 
@@ -92,7 +98,7 @@ export class LoginService {
 
   public getUserRole(){
     let user = this.getUser();
-    return user.authorities[0].authority;
+    return user.rolAsignado;
   }
 
   getUserDetails() {

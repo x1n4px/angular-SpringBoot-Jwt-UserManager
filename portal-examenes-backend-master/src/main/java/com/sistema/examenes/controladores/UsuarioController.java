@@ -1,23 +1,17 @@
 package com.sistema.examenes.controladores;
 
-import com.sistema.examenes.modelo.Rol;
 import com.sistema.examenes.modelo.Usuario;
-import com.sistema.examenes.modelo.UsuarioRol;
 import com.sistema.examenes.repositorios.UsuarioRepository;
 import com.sistema.examenes.servicios.UsuarioService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.Map;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -36,19 +30,9 @@ public class UsuarioController {
 
     @PostMapping("/")
     public Usuario guardarUsuario(@RequestBody Usuario usuario) throws Exception{
-        usuario.setPerfil("default.png");
-        Set<UsuarioRol> usuarioRoles = new HashSet<>();
-
-        Rol rol = new Rol();
-        rol.setRolId(2L);
-        rol.setRolNombre("NORMAL");
-
-        UsuarioRol usuarioRol = new UsuarioRol();
-        usuarioRol.setUsuario(usuario);
-        usuarioRol.setRol(rol);
+        usuario.setRolAsignado("NORMAL");
         usuario.setPassword(encoder2.encode(usuario.getPassword()));
-        usuarioRoles.add(usuarioRol);
-        return usuarioService.guardarUsuario(usuario,usuarioRoles);
+        return usuarioRepository.save(usuario);
     }
 
     @PostMapping("/requestNewPassword")
@@ -62,7 +46,7 @@ public class UsuarioController {
         usuario.setPassword(cipherPassword);
         usuarioService.guardarClave(usuario);
         usuarioRepository.save(usuario);
-
+        //microservicio notificaciones
         String subject = "Nueva contraseña generada";
         String message = "Su nueva contraseña es: " + newPassword;
 
@@ -86,23 +70,6 @@ public class UsuarioController {
         }
         return sb.toString();
     }
-/*
-        // Crear el mensaje de correo electrónico
-    SimpleMailMessage message = new SimpleMailMessage();
-    message.setTo(email);
-    message.setSubject("Nueva contraseña para su cuenta");
-    message.setText("Su nueva contraseña es: " + newPassword);
-
-    // Enviar el mensaje de correo electrónico
-    mailSender.send(message);
-         */
-
-
-
-
-
-
-
 
     @GetMapping("/{username}")
     public Usuario obtenerUsuario(@PathVariable("username") String username){

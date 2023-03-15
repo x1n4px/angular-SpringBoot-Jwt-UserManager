@@ -1,0 +1,36 @@
+<body>
+  <div class="col-md-6 offset-md-3">
+<form (ngSubmit)="guardarUsuario()">
+  <h1>Modificar Datos Usuario: {{usuario.nombre}}, {{usuario.apellido}}</h1>
+
+      <label for="nombre">Nombre: </label>
+      <input type="text" id="nombre" name="nombre" [(ngModel)]="usuario.nombre"><br>
+
+      <label for="apellidos">Apellidos: </label>
+      <input type="text" id="apellidos" name="apellidos" [(ngModel)]="usuario.apellido"><br>
+
+      <label for="email">Email: </label>
+      <input type="text" id="email" name="email" [(ngModel)]="usuario.email"><br>
+
+      <label for="username">Username: </label>
+      <input type="text" id="username" name="username" [(ngModel)]="usuario.username"><br>
+
+      <label for="rol">Rol:</label>
+
+      <select id="rol" name="rol" [(ngModel)]="usuario.rolAsignado" required>
+        <option value="">- Seleccione una opción -</option>
+        <option value="ADMIN">ADMIN</option>
+        <option value="NORMAL">NORMAL</option>
+      </select>
+      <div style="text-align: center;">
+        <button class="css-button-3d--blue">Enviar</button> <br>
+        <button class="css-button-3d--gray" (click)="volver()">Volver</button>
+
+      </div>
+
+</form>
+
+
+</div>
+
+</body>

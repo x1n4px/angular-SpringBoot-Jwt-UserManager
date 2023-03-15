@@ -8,6 +8,8 @@
       <th>Nombre</th>
       <th>Apellido</th>
       <th>Telefono</th>
+      <th>Rol Asignado</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -18,8 +20,9 @@
       <td>{{ usuario.nombre }}</td>
       <td>{{ usuario.apellido }}</td>
       <td>{{ usuario.telefono }}</td>
-      <button  class = "btn btn-info">Editar</button>
-      <button (click) = "eliminarUsuario(usuario.id)" class = "btn btn-danger" style = "margin-left : 10px">Eliminar</button>    </tr>
+      <td>{{ usuario.rolAsignado }}</td>
+      <button  (click)="verDetallesUsuario(usuario.id)"   class = "css-button-3d--blue">Editar</button>
+      <button (click) = "eliminarUsuario(usuario.id)" class = "css-button-3d--gray" style = "margin-left : 10px">Eliminar</button>    </tr>
 
   </tbody>
 </table>

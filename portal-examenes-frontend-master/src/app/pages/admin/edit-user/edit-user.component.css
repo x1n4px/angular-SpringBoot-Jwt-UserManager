@@ -42,7 +42,6 @@ table.center {
   height: 100vh;
   color: #4f546c;
   font-size: 0.9rem;
-  margin: 0;
   margin: 20px;
   }
 
@@ -96,7 +95,52 @@ table.center {
   }
 
 
-  .navbar {
+  input[type="text"], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+  }
+
+
+
+  button:hover {
+    background-color: #3e8e41;
+  }
+
+  button:active {
+    background-color: #3e8e41;
+  }
+
+  button:focus {
+    outline: none;
+  }
+
+  .error {
+    color: red;
+    font-size: small;
+    font-weight: normal;
+    margin-top: 5px;
+  }
+
+  form label {
+    display: block;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  form input[type="submit"]{
+    width:100%;
+    padding:8px 16px;
+    margin-top:32px;
+    border:1px solid #000;
+    border-radius:5px;
+    display:block;
+    color:#fff;
+    background-color:#286090;
+  }
+ .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -121,12 +165,12 @@ table.center {
   .navbar-right {
     display: flex;
   }
-
-
   .css-button-3d--blue {
-    min-width: 130px;
-    height: 30px;
+    margin-top: 10px;
+    min-width: 500px;
+    height: 60px;
     color: #fff;
+    font-size: x-large;
     padding: 5px 10px;
     font-weight: bold;
     cursor: pointer;
@@ -149,9 +193,11 @@ table.center {
   }
 
   .css-button-3d--gray {
-    min-width: 130px;
-    height: 30px;
+    margin-top: 10px;
+    min-width: 500px;
+    height: 60px;
     color: #fff;
+    font-size: x-large;
     padding: 5px 10px;
     font-weight: bold;
     cursor: pointer;
@@ -161,13 +207,11 @@ table.center {
     outline: none;
     border-radius: 5px;
     border: none;
-    background: #cf3333;
+    background: #337ab7;
     box-shadow: 0 5px #2c0b8e;
-    margin-top: 10px;
-    margin-bottom: 15px;
   }
   .css-button-3d--gray:hover {
-    box-shadow: 0 3px #2c0b8e;
+    background-color: #515251;
 
     top: 1px;
   }
@@ -175,3 +219,11 @@ table.center {
     box-shadow: 0 0 #2c0b8e;
     top: 5px;
   }
+
+  .label{
+    font-size: x-large;
+  }
+
+
+
+

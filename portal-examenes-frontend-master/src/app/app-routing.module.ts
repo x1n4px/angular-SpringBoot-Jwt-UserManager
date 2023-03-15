@@ -10,6 +10,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { ChangePasswordAfterLoginComponent } from './pages/change-password-after-login/change-password-after-login.component';
 import { ChangePassNoLoginComponent } from './pages/change-pass-no-login/change-pass-no-login.component';
+import { EditUserComponent } from './pages/admin/edit-user/edit-user.component';
 
 const routes: Routes = [
   {
@@ -41,7 +42,6 @@ const routes: Routes = [
     path:'admin',
     component:DashboardComponent,
     pathMatch:'full',
-    canActivate:[AdminGuard]
   },
   {
     path:'user-dashboard',
@@ -53,6 +53,11 @@ const routes: Routes = [
     path : 'profile',
     component : ProfileComponent,
     pathMatch : 'full',
+  },
+  {
+    path:'editUser/:id',
+    component:EditUserComponent,
+    pathMatch:'full'
   }
 ];
 

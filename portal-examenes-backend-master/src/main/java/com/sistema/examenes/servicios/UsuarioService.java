@@ -1,26 +1,24 @@
 package com.sistema.examenes.servicios;
 
 import com.sistema.examenes.modelo.Usuario;
-import com.sistema.examenes.modelo.UsuarioRol;
-import com.sistema.examenes.repositorios.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 public interface UsuarioService {
 
-    public Usuario guardarUsuario(Usuario usuario, Set<UsuarioRol> usuarioRoles) throws Exception;
 
     public Usuario guardarClave(Usuario usuario);
 
     public Usuario obtenerUsuario(String username);
-    public Usuario obtenerUsuarioPorEmail(String email);
+    public Optional<Usuario> obtenerUsuarioPorId(Long id);
 
 
     public void eliminarUsuario(Long usuarioId);
 
     public List<Usuario> obtenerUsuarios();
 
+
+    public void modificarUsuario(Usuario usuario);
 
 }

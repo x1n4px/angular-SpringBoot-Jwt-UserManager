@@ -2,15 +2,13 @@ package com.sistema.examenes.servicios.impl;
 
 
 import com.sistema.examenes.modelo.Usuario;
-import com.sistema.examenes.modelo.UsuarioRol;
-import com.sistema.examenes.repositorios.RolRepository;
 import com.sistema.examenes.repositorios.UsuarioRepository;
 import com.sistema.examenes.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
@@ -18,38 +16,16 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private RolRepository rolRepository;
-
-    @Override
-    public Usuario guardarUsuario(Usuario usuario, Set<UsuarioRol> usuarioRoles) throws Exception {
-        Usuario usuarioLocal = usuarioRepository.findByUsername(usuario.getUsername());
-        if(usuarioLocal != null){
-            System.out.println("El usuario ya existe");
-            throw new Exception("El usuario ya esta presente");
-        }
-        else{
-            for(UsuarioRol usuarioRol:usuarioRoles){
-                rolRepository.save(usuarioRol.getRol());
-            }
-            usuario.getUsuarioRoles().addAll(usuarioRoles);
-            usuarioLocal = usuarioRepository.save(usuario);
-        }
-        return usuarioLocal;
-    }
 
     @Override
     public Usuario obtenerUsuario(String username) {
         return usuarioRepository.findByUsername(username);
     }
 
+    public Optional<Usuario> obtenerUsuarioPorId(Long id){return usuarioRepository.findById(id);}
+
     public Usuario guardarClave(Usuario usuario){return usuarioRepository.save(usuario);}
 
-
-    @Override
-    public Usuario obtenerUsuarioPorEmail(String email) {
-        return usuarioRepository.findByEmail(email);
-    }
 
     @Override
     public void eliminarUsuario(Long usuarioId) {
@@ -61,6 +37,15 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioRepository.findAll();
     }
 
+    public void modificarUsuario(Usuario usuario){
+        if(usuarioRepository.existsById(usuario.getId())){
+            usuarioRepository.save(usuario);
+
+
+        }else{
+            throw new RuntimeException();
+        }
+    }
 
 
 

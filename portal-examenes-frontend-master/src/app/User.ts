@@ -6,5 +6,5 @@ export class User {
   nombre!: string;
   apellido!: string;
   telefono!: string;
-  perfil!: string;
+  rolAsignado!:string;
 }

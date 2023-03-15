@@ -7,9 +7,7 @@ import com.sistema.examenes.modelo.Usuario;
 import com.sistema.examenes.repositorios.UsuarioRepository;
 import com.sistema.examenes.servicios.UsuarioService;
 import com.sistema.examenes.servicios.impl.UserDetailsServiceImpl;
-import org.apache.tomcat.util.buf.B2CConverter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -72,6 +70,19 @@ public class AuthenticationController {
         }
     }
 
+
+    @GetMapping("user/{id}")
+    public ResponseEntity<Optional<Usuario>> obtenerUsuarioPorId(@PathVariable Long id){
+        Optional<Usuario> usuario = usuarioService.obtenerUsuarioPorId(id);
+        return ResponseEntity.ok(usuario);
+    }
+
+    @PutMapping("user/{id}")
+    public ResponseEntity<?> modificarUsuario(@PathVariable Long id, @RequestBody Usuario usuario){
+        usuario.setId(id);
+        usuarioService.modificarUsuario(usuario);
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping("/actual-usuario")
     public Usuario obtenerUsuarioActual(Principal principal){

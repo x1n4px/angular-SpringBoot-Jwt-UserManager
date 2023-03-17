@@ -29,22 +29,37 @@
 - [x] Añadir cambiar contraseña pre-login (generar contraseña cifrada y enviar por email)
 
 
-#JUnit
+### generarToken:
+-[ ] testGenerarToken - probar la generación de un token exitoso
+-[ ] testGenerarTokenConCredencialesInvalidas - probar la generación de un token con credenciales incorrectas
+-[ ] testGenerarTokenConUsuarioDeshabilitado - probar la generación de un token con un usuario deshabilitado
+### autenticar:
+-[ ] testAutenticar - probar la autenticación exitosa de un usuario
+-[ ] testAutenticarConCredencialesInvalidas - probar la autenticación con credenciales incorrectas
+-[ ] testAutenticarConUsuarioDeshabilitado - probar la autenticación con un usuario deshabilitado
 
-crear usuario
-crear usuario sin username/email/password
-iniciar sesion
-iniciar sesion con email
-iniciar sesión con email no valido
-iniciar sesión sin email
-iniciar con datos vacios
+### obtenerUsuarioPorId:
+-[ ] testObtenerUsuarioPorIdExistente - probar la obtención exitosa de un usuario existente por su id
+-[ ] testObtenerUsuarioPorIdInexistente - probar la obtención de un usuario inexistente por su id
 
-registrar usuario
-registrar sin datos
-registrar datos inválidos
+### modificarUsuario:
+-[ ] testModificarUsuarioExistente - probar la modificación exitosa de un usuario existente
+-[ ] testModificarUsuarioInexistente - probar la modificación de un usuario inexistente
 
-modificar usuario
-modificar usuario con datos invalidos
+### obtenerUsuarioActual:
+-[ ] testObtenerUsuarioActual - probar la obtención exitosa del usuario actual
 
-borrar usuario
-borrar autousuario
+### obtenerUsuarios:
+
+-[ ] testObtenerUsuarios - probar la obtención exitosa de la lista de usuarios
+
+### eliminarUsuario:
+-[ ] testEliminarUsuarioExistente - probar la eliminación exitosa de un usuario existente
+-[ ] testEliminarUsuarioInexistente - probar la eliminación de un usuario inexistente
+
+### changePassword:
+-[ ] testChangePassword - probar el cambio de contraseña exitoso
+-[ ] testChangePasswordConUsuarioInexistente - probar el cambio de contraseña con un usuario inexistente
+-[ ] testChangePasswordConCredencialesIncorrectas - probar el cambio de contraseña con credenciales incorrectas
+
+

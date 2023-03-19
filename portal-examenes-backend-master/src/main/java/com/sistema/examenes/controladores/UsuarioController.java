@@ -49,6 +49,8 @@ public class UsuarioController {
         //microservicio notificaciones
         String subject = "Nueva contraseña generada";
         String message = "Su nueva contraseña es: " + newPassword;
+        /*
+        MICROSERVICIO DE NOTIFICACIONES
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom("silosabia3@gmail.com");
@@ -56,7 +58,7 @@ public class UsuarioController {
         mailMessage.setSubject(subject);
         mailMessage.setText(message);
         javaMailSender.send(mailMessage);
-
+        */
 
         return usuario;
     }

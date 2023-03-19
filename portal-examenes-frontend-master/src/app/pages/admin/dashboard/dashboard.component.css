@@ -166,12 +166,85 @@ table.center {
     margin-top: 10px;
     margin-bottom: 15px;
   }
-  .css-button-3d--gray:hover {
-    box-shadow: 0 3px #2c0b8e;
 
+  .css-button-3d--gray:hover {
+    transform: scale(1);
+    box-shadow: 0 3px #2c0b8e;
+    top: 1px;
+    z-index: 1;
+  }
+
+
+  .css-button-3d--gray:active {
+    box-shadow: 0 0 #2c0b8e;
+    top: 5px;
+  }
+
+
+
+
+  .css-button-3d--gray:hover:after {
+    min-width: 130px;
+    height: 60px;
+    content: "¿Estás seguro?";
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #cf3333;
+    color: #fff;
+    padding: 5px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 18px;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+
+  .css-button-3d--gray:hover:hover:after {
+    top: -20px;
+    opacity: 1;
+  }
+
+  .css-button-3d--gray:hover span {
+    display: none;
+  }
+
+  .css-button-3d--gray:hover:hover span {
+    display: block;
+  }
+
+  .css-button-3d--gray:hover:hover {
+    transform: scale(2);
+  }
+
+
+
+  .css-button-3d--blue2 {
+    min-width: 300px;
+    position: center;
+    height: 30px;
+    color: #fff;
+    padding: 5px 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: block;
+    outline: none;
+    border-radius: 5px;
+    border: none;
+    background: #337ab7;
+    box-shadow: 0 5px #2c0b8e;
+    margin: auto;
+    margin-bottom: 10px;
+  }
+  .css-button-3d--blue2:hover {
+    box-shadow: 0 3px #2c0b8e;
     top: 1px;
   }
-  .css-button-3d--gray:active {
+  .css-button-3d--blue2:active {
     box-shadow: 0 0 #2c0b8e;
     top: 5px;
   }

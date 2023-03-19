@@ -47,7 +47,6 @@ const routes: Routes = [
     path:'user-dashboard',
     component:UserDashboardComponent,
     pathMatch:'full',
-    canActivate:[NormalGuard]
   },
   {
     path : 'profile',

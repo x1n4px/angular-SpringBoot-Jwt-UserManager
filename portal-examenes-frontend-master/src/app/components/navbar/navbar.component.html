@@ -45,10 +45,10 @@
     class="example-icon favorite-icon"
     aria-label="Example icon-button with heart icon"
   >
-    {{ user.username }}
+    {{ user.nombre }}
   </button>
   <a
-    *ngIf = "isLoggedIn"
+    *ngIf = "isLoggedIn && user"
     [routerLink] = "'/profile'"
     style="margin-right: 50px"
     mat-icon-button

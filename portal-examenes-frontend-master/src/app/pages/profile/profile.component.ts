@@ -11,7 +11,7 @@ import { LoginService } from './../../services/login.service';
 })
 export class ProfileComponent implements OnInit {
   usuarioActual: any;
-  constructor(private userService: UserService, private loginService:LoginService) { }
+  constructor(private userService: UserService, private loginService:LoginService, private route:Router) { }
 
   ngOnInit() {
     this.loginService.getCurrentUser().subscribe(data => {
@@ -19,5 +19,13 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+
+  changePages(){
+    if(this.usuarioActual.rolAsignado === "ADMIN"){
+      this.route.navigate(['admin']);
+    }else {
+      this.route.navigate(['user-dashboard']);
+    }
+  }
 
 }

@@ -46,4 +46,9 @@ export class DashboardComponent implements OnInit {
   verDetallesUsuario(id:number){
     this.route.navigate(['editUser', id])
   }
+
+
+  vistaUsuario(){
+    this.route.navigate(['user-dashboard']);
+  }
 }

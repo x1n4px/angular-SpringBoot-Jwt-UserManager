@@ -7,6 +7,7 @@ import com.sistema.examenes.modelo.Usuario;
 import com.sistema.examenes.repositorios.UsuarioRepository;
 import com.sistema.examenes.servicios.UsuarioService;
 import com.sistema.examenes.servicios.impl.UserDetailsServiceImpl;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -91,7 +93,9 @@ public class AuthenticationController {
 
     @GetMapping("/all-usuario")
     public List<Usuario> obtenerUsuarios() {
+
         return usuarioService.obtenerUsuarios();
+
     }
 
     @DeleteMapping("/eliminarUsuario/{id}")

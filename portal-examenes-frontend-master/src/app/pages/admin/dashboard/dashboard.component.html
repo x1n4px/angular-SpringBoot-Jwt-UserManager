@@ -1,8 +1,10 @@
 <div id = "main-continer">
+  <div id = "overlay">
+    <button class = "css-button-3d--blue2"(click)="vistaUsuario()">Vista usuario</button>
+  </div>
 <table class="center">
   <thead>
     <tr>
-      <th>Id</th>
       <th>Correo electrónico</th>
       <th>Nombre de Usuario</th>
       <th>Nombre</th>
@@ -14,7 +16,6 @@
   </thead>
   <tbody>
     <tr *ngFor="let usuario of usuarios">
-      <td>{{ usuario.id }}</td>
       <td>{{ usuario.email }}</td>
       <td>{{ usuario.username }}</td>
       <td>{{ usuario.nombre }}</td>
@@ -26,4 +27,5 @@
 
   </tbody>
 </table>
+
 </div>

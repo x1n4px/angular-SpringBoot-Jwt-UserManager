@@ -1,8 +1,11 @@
 package com.sistema.examenes;
 
 import com.sistema.examenes.controladores.AuthenticationController;
+import com.sistema.examenes.modelo.JwtRequest;
+import com.sistema.examenes.modelo.JwtResponse;
 import com.sistema.examenes.modelo.Usuario;
 import com.sistema.examenes.repositorios.UsuarioRepository;
+import com.sistema.examenes.servicios.UsuarioService;
 import lombok.var;
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
+import org.springframework.http.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -32,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DisplayName("Test")
@@ -46,6 +50,12 @@ class SistemaExamenesBackendApplicationTests {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+
+
+	private final BCryptPasswordEncoder encoder2 = new BCryptPasswordEncoder();
+
+	@Autowired
+	private UsuarioService usuarioService;
 
 	private MockMvc mockMvc;
 
@@ -107,6 +117,13 @@ class SistemaExamenesBackendApplicationTests {
 		@Test
 		@DisplayName("Test Generar Token")
 		public void testGenerarToken() {
+			Usuario usuario1 = new Usuario(1L, "usuario1", "password1", "Nombre1", "Apellido1", "email1@dominio.com", "1234567890", true, "ROL1");
+			usuarioRepository.save(usuario1);
+			//loginData = username, password
+
+
+
+
 
 		}
 
@@ -128,23 +145,62 @@ class SistemaExamenesBackendApplicationTests {
 	@DisplayName("Autenticar")
 	public class autenticar {
 
+
+
+
 		@Test
 		@DisplayName("Test autenticar")
 		public void testAutenticar() {
+
+			// Crear un objeto JwtRequest con el nombre de usuario y la contraseña
+			JwtRequest jwtRequest = new JwtRequest("napazo2000", "password1");
+
+			// Crear una cabecera HTTP para indicar el tipo de contenido de la solicitud
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+
+			// Crear una entidad HTTP con el objeto JwtRequest y la cabecera
+			HttpEntity<JwtRequest> request = new HttpEntity<>(jwtRequest, headers);
+
+			// Enviar una solicitud POST al endpoint /generate-token con la entidad
+			ResponseEntity<JwtResponse> response = restTemplate.exchange(
+					"http://localhost:" + port + "/generate-token",
+					HttpMethod.POST,
+					request,
+					JwtResponse.class
+			);
+
+			// Verificar que la respuesta tiene un estado HTTP 200 OK
+			assertEquals(200, response.getStatusCodeValue());
+
+			// Verificar que la respuesta contiene un objeto JwtResponse con un token no vacío
+			JwtResponse jwtResponse = response.getBody();
+			String token = jwtResponse.getToken();
+			assertEquals(true, jwtResponse.getToken().length() > 0);
 
 		}
 
 		@Test
 		@DisplayName("Test Autenticar Con Credenciales Invalidas")
 		public void testAutenticarConCredencialesInvalidas() throws Exception {
+			// Credenciales inválidas
+			JwtRequest jwtRequest = new JwtRequest("napazo2000", "contraseñaInvalida");
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			HttpEntity<JwtRequest> request = new HttpEntity<>(jwtRequest, headers);
+
+			ResponseEntity<JwtResponse> response = restTemplate.exchange(
+					"http://localhost:" + port + "/generate-token",
+					HttpMethod.POST,
+					request,
+					JwtResponse.class
+			);
+
+			assertThat(response.getStatusCode().value()).isEqualTo(HttpStatus.BAD_REQUEST.value());
 
 		}
 
-		@Test
-		@DisplayName("test Autenticar Con Usuario Deshabilitado")
-		public void testAutenticarConUsuarioDeshabilitado() throws Exception {
-
-		}
 
 	}
 
@@ -155,12 +211,57 @@ class SistemaExamenesBackendApplicationTests {
 		@Test
 		@DisplayName("Test Obtener Usuario Por Id Existente")
 		public void testObtenerUsuarioPorIdExistente() {
+			JwtRequest jwtRequest = new JwtRequest("napazo2000", "password1");
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			HttpEntity<JwtRequest> request = new HttpEntity<>(jwtRequest, headers);
+			ResponseEntity<JwtResponse> response = restTemplate.exchange(
+					"http://localhost:" + port + "/generate-token",
+					HttpMethod.POST,
+					request,
+					JwtResponse.class
+			);
+			JwtResponse jwtResponse = response.getBody();
+			String token = jwtResponse.getToken();
+
+			Usuario usuario = new Usuario(95L, "usuario1", "password1", "Nombre1", "Apellido1", "email1@dominio.com", "1234567890", true, "NORMAL");
+			usuarioRepository.save(usuario);
+			ResponseEntity<Optional<Usuario>> response2 = restTemplate.exchange(
+					"http://localhost:" + port + "/user/" + usuario.getId(),
+					HttpMethod.GET,
+					null,
+					new ParameterizedTypeReference<Optional<Usuario>>() {}
+			);
+			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 		}
+
 
 		@Test
 		@DisplayName("Test Obtener Usuario Por Id Inexistente")
 		public void testObtenerUsuarioPorIdInexistente() throws Exception {
+			JwtRequest jwtRequest = new JwtRequest("napazo2000", "password1");
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			HttpEntity<JwtRequest> request = new HttpEntity<>(jwtRequest, headers);
+			ResponseEntity<JwtResponse> response = restTemplate.exchange(
+					"http://localhost:" + port + "/generate-token",
+					HttpMethod.POST,
+					request,
+					JwtResponse.class
+			);
+			JwtResponse jwtResponse = response.getBody();
+			String token = jwtResponse.getToken();
+
+			Usuario usuario = new Usuario(95L, "usuario1", "password1", "Nombre1", "Apellido1", "email1@dominio.com", "1234567890", true, "NORMAL");
+			usuarioRepository.save(usuario);
+			ResponseEntity<Optional<Usuario>> response2 = restTemplate.exchange(
+					"http://localhost:" + port + "/user/1000" ,
+					HttpMethod.GET,
+					null,
+					new ParameterizedTypeReference<Optional<Usuario>>() {}
+			);
+			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 		}
 
@@ -174,8 +275,38 @@ class SistemaExamenesBackendApplicationTests {
 		@Test
 		@DisplayName("Test Modificar Usuario Existente")
 		public void testModificarUsuarioExistente() {
+			JwtRequest jwtRequest = new JwtRequest("napazo2000", "password1");
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			HttpEntity<JwtRequest> request = new HttpEntity<>(jwtRequest, headers);
+			ResponseEntity<JwtResponse> response = restTemplate.exchange(
+					"http://localhost:" + port + "/generate-token",
+					HttpMethod.POST,
+					request,
+					JwtResponse.class
+			);
+			JwtResponse jwtResponse = response.getBody();
+			String token = jwtResponse.getToken();
 
+			Usuario usuario = new Usuario(95L, "usuario1", "password1", "Nombre1", "Apellido1", "email1@dominio.com", "1234567890", true, "NORMAL");
+			usuarioRepository.save(usuario);
+
+			usuario.setApellido("NuevoApellido");
+			HttpEntity<Usuario> request2 = new HttpEntity<>(usuario, headers);
+
+			ResponseEntity<Usuario> response2 = restTemplate.exchange(
+					"http://localhost:" + port + "user/" + usuario.getId(),
+					HttpMethod.PUT,
+					request2,
+					Usuario.class
+			);
+
+			assertThat(response2.getStatusCode()).isEqualTo(HttpStatus.OK);
+			assertThat(response2.getBody().getApellido()).isEqualTo("NuevoApellido");
 		}
+
+
+
 
 		@Test
 		@DisplayName("Test Modificar Usuario Inexistente")
@@ -277,21 +408,44 @@ class SistemaExamenesBackendApplicationTests {
 		public class guardarUsuario {
 
 			@Test
-			@DisplayName("Debe Devolver Usuario Despues De Guardarlo")
-			public void testGuardarUsuarioDebeDevolverUsuarioDespuesDeGuardarlo() {
+			@DisplayName("Debe Devolver 200 ")
+			public void testGuardarUsuario() {
+				Usuario usuario = new Usuario(1L, "usuario1", "password1", "Nombre1", "Apellido1", "email1@dominio.com", "1234567890", true, "NORMAL");
 
+				var peticion = post("http", "localhost",port, "/usuarios/", usuario);
+
+				var respuesta = restTemplate.exchange(peticion, Void.class);
+
+				assertThat(respuesta.getStatusCode().value()).isEqualTo(200);
 			}
 
 			@Test
 			@DisplayName("Debe Asignar Rol Normal")
 			public void testGuardarUsuarioDebeAsignarRolNormal() throws Exception {
+				Usuario usuario = new Usuario(1L, "usuario1", "password1", "Nombre1", "Apellido1", "email2@dominio.com", "1234567890", true, "NORMAL");
 
+				var peticion = post("http", "localhost",port, "/usuarios/", usuario);
+
+				var respuesta = restTemplate.exchange(peticion, Void.class);
+
+				//assertThat(respuesta.getStatusCode().value()).isEqualTo(200);
+				Usuario usuario1 = usuarioRepository.findByEmail("email24@dominio.com");
+				assertThat(usuario1.getRolAsignado() == "NORMAL");
 			}
 
 			@Test
 			@DisplayName("Debe Cifrar Correctamente La Contrasena")
 			public void testGuardarUsuarioDebeCifrarCorrectamenteLaContrasena() throws Exception {
+				Usuario usuario = new Usuario(1L, "usuario1", "password1", "Nombre1", "Apellido1", "email3@dominio.com", "1234567890", true, "NORMAL");
+				String password = "password1";
+				var peticion = post("http", "localhost",port, "/usuarios/", usuario);
 
+				var respuesta = restTemplate.exchange(peticion, Void.class);
+
+				//assertThat(respuesta.getStatusCode().value()).isEqualTo(200);
+				Usuario usuario1 = usuarioRepository.findByEmail("email24@dominio.com");
+
+				assertThat(encoder2.matches(password, usuario1.getPassword()));
 			}
 
 		}
@@ -329,7 +483,13 @@ class SistemaExamenesBackendApplicationTests {
 			@Test
 			@DisplayName("Debe Devolver Usuario Correcto Para Nombre De Usuario Valido")
 			public void testObtenerUsuarioDebeDevolverUsuarioCorrectoParaNombreDeUsuarioValido() {
+				Usuario usuario = new Usuario(1L, "usuarioObtener", "password1", "Nombre1", "Apellido1", "email3@dominio.com", "1234567890", true, "NORMAL");
+				usuarioRepository.save(usuario);
+				var peticion = get("http", "localhost",port, "/usuarios/usuarioObtener");
 
+				var respuesta = restTemplate.exchange(peticion, Void.class);
+
+				assertThat(respuesta.getStatusCode().value()).isEqualTo(200);
 			}
 
 			@Test

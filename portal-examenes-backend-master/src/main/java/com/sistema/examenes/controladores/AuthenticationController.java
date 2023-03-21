@@ -9,6 +9,7 @@ import com.sistema.examenes.servicios.UsuarioService;
 import com.sistema.examenes.servicios.impl.UserDetailsServiceImpl;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -45,8 +46,13 @@ public class AuthenticationController {
     @PostMapping("/generate-token")
     public ResponseEntity<?> generarToken(@RequestBody JwtRequest jwtRequest) throws Exception {
         Usuario usuario = usuarioService.obtenerUsuario(jwtRequest.getUsername());
+
+        if (usuario == null) {
+            return ResponseEntity.badRequest().body("Usuario no encontrado");
+        }
+
         if (!encoder2.matches(jwtRequest.getPassword(), usuario.getPassword())) {
-            return ResponseEntity.badRequest().body("Incorrect current password");
+            return ResponseEntity.badRequest().body("Credenciales inválidas");
         }
 
         try {
@@ -56,9 +62,11 @@ public class AuthenticationController {
         } catch (BadCredentialsException e) {
             throw new Exception("Credenciales invalidas autenticadas" );
         }
+
         UserDetails userDetails =  this.userDetailsService.loadUserByUsername(jwtRequest.getUsername());
         String token = this.jwtUtils.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
+
     }
 
 
@@ -86,19 +94,20 @@ public class AuthenticationController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/actual-usuario")
+    @GetMapping("/user/actual")
     public Usuario obtenerUsuarioActual(Principal principal){
         return (Usuario) this.userDetailsService.loadUserByUsername(principal.getName());
     }
 
-    @GetMapping("/all-usuario")
+    @GetMapping("/user/todos")
     public List<Usuario> obtenerUsuarios() {
 
         return usuarioService.obtenerUsuarios();
 
     }
 
-    @DeleteMapping("/eliminarUsuario/{id}")
+
+    @DeleteMapping("/user/eliminarUsuario/{id}")
     public ResponseEntity<Map<String, Boolean>> eliminarUsuario(@PathVariable Long id){
         Optional<Usuario> usuario = usuarioRepository.findById(id);
         usuarioRepository.deleteById(id);
@@ -106,7 +115,7 @@ public class AuthenticationController {
         respuesta.put("eliminar", Boolean.TRUE);
         return ResponseEntity.ok(respuesta);
     }
-    @PostMapping("/changePass")
+    @PostMapping("/user/perfil/cambiarClave")
     public ResponseEntity<?> changePassword(@RequestBody Map<String, String> request){
         String email = request.get("email");
         String currentPassword = request.get("currentPassword");
@@ -138,7 +147,7 @@ public class AuthenticationController {
 
 
 
-    @GetMapping("/profile")
+    @GetMapping("/user/perfil")
     public String  getUserDetails(HttpServletRequest request) {
         HttpSession session = request.getSession();
         Usuario user = (Usuario) session.getAttribute("emailId");

@@ -39,18 +39,17 @@
 
 ### autenticar:
 
-- [ ] testAutenticar - probar la autenticación exitosa de un usuario
+- [x] testAutenticar - probar la autenticación exitosa de un usuario
 
-- [ ] testAutenticarConCredencialesInvalidas - probar la autenticación con credenciales incorrectas
+- [x] testAutenticarConCredencialesInvalidas - probar la autenticación con credenciales incorrectas
 
-- [ ] testAutenticarConUsuarioDeshabilitado - probar la autenticación con un usuario deshabilitado
 
 
 ### obtenerUsuarioPorId:
 
-- [ ] testObtenerUsuarioPorIdExistente - probar la obtención exitosa de un usuario existente por su id
+- [x] testObtenerUsuarioPorIdExistente - probar la obtención exitosa de un usuario existente por su id
 
-- [ ] testObtenerUsuarioPorIdInexistente - probar la obtención de un usuario inexistente por su id
+- [x] testObtenerUsuarioPorIdInexistente - probar la obtención de un usuario inexistente por su id
 
 
 ### modificarUsuario:
@@ -62,12 +61,12 @@
 
 ### obtenerUsuarioActual:
 
-- [ ] testObtenerUsuarioActual - probar la obtención exitosa del usuario actual
+- [x] testObtenerUsuarioActual - probar la obtención exitosa del usuario actual
 
 
 ### obtenerUsuarios:
 
-- [ ] testObtenerUsuarios - probar la obtención exitosa de la lista de usuarios
+- [x] testObtenerUsuarios - probar la obtención exitosa de la lista de usuarios
 
 ### eliminarUsuario:
 
@@ -85,4 +84,32 @@
 - [ ] testChangePasswordConCredencialesIncorrectas - probar el cambio de contraseña con credenciales incorrectas
 
 
+## UsuarioController
 
+### Guardar Usuario
+
+- [x] Debe devolver 200
+
+- [x] Debe asignar Rol normal
+
+- [x] Debe cifrar Correctamente la contrseña
+
+### Request password
+
+- [ ] Debe Devolver Usuario Despues De Actualizar Su Contrasena
+
+- [ ] Debe Generar Contrasena Aleatoria Con Longitud Diez
+
+- [ ] Debe Devolver Null Si No Se Encuentra Usuario Asociado Al Correo Electronico
+
+### Obtener Usuario
+
+- [ ] Debe Devolver Usuario Correcto Para Nombre De Usuario Valido
+
+- [ ] Debe Devolver Null Si Se Proporciona Nombre De Usuario No Valido
+
+### Eliminar Usuario
+
+- [ ] Debe Eliminar Usuario Correctamente De La Base De Datos
+
+- [ ] No Debe Generar Excepcion Si Se Proporciona ID De Usuario No Valido

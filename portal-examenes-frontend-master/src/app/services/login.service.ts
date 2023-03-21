@@ -28,20 +28,20 @@ export class LoginService {
   }
 
   public getCurrentUser(){
-    return this.http.get(`${baserUrl}/actual-usuario`);
+    return this.http.get(`${baserUrl}/user/actual`);
   }
 
   public getAllUser(){
-    return this.http.get<User[]>(`${baserUrl}/all-usuario`);
+    return this.http.get<User[]>(`${baserUrl}/user/todos`);
   }
 
   eliminarUsuario(id:number): Observable<Object>{
-    return this.http.delete(`${this.eURL}/${id}`);  }
+    return this.http.delete(`${baserUrl}/user/eliminarUsuario/${id}`);  }
 
 
   changePassword(email: string, currentPassword: string, newPassword: string): Observable<any>{
     const body = {email, currentPassword, newPassword};
-    return this.http.post<any>("http://localhost:8080/changePass", body);
+    return this.http.post<any>("http://localhost:8080/user/perfil/cambiarClave", body);
   }
 
   obtenerUsuarioPorId(id:number):Observable<User>{

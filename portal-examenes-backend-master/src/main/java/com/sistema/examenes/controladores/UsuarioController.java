@@ -38,7 +38,7 @@ public class UsuarioController {
 
 
 
-
+    //MICROSERVICIO DE NOTIFICACIONES
     @PostMapping("/requestNewPassword")
     public Usuario requestPassword(@RequestBody Map<String, String> emailBody, HttpServletResponse response) {
         response.setHeader("Access-Control-Allow-Origin", "*"); //maybe redundant function (Header implements)
@@ -66,6 +66,10 @@ public class UsuarioController {
 
         return usuario;
     }
+
+
+
+
     private String generateRandomPassword() {
         StringBuilder sb = new StringBuilder();
         Random random = new Random();
@@ -83,12 +87,6 @@ public class UsuarioController {
     }
 
 
-
-
-    @DeleteMapping("/{usuarioId}")
-    public void eliminarUsuario(@PathVariable("usuarioId") Long usuarioId){
-        usuarioService.eliminarUsuario(usuarioId);
-    }
 
 
 

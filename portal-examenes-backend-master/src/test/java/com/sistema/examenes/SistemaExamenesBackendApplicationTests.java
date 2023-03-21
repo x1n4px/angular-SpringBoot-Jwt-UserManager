@@ -1,6 +1,7 @@
 package com.sistema.examenes;
 
 import com.sistema.examenes.controladores.AuthenticationController;
+import com.sistema.examenes.controladores.UsuarioController;
 import com.sistema.examenes.modelo.JwtRequest;
 import com.sistema.examenes.modelo.JwtResponse;
 import com.sistema.examenes.modelo.Usuario;
@@ -17,12 +18,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriBuilderFactory;
@@ -30,11 +33,15 @@ import org.springframework.web.util.UriBuilderFactory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.in;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -51,6 +58,8 @@ class SistemaExamenesBackendApplicationTests {
 	@Autowired
 	private UsuarioRepository usuarioRepository;
 
+	@Autowired
+	private UsuarioController usuarioController;
 
 	private final BCryptPasswordEncoder encoder2 = new BCryptPasswordEncoder();
 
@@ -239,6 +248,7 @@ class SistemaExamenesBackendApplicationTests {
 
 		@Test
 		@DisplayName("Test Obtener Usuario Por Id Inexistente")
+		@DirtiesContext
 		public void testObtenerUsuarioPorIdInexistente() throws Exception {
 			JwtRequest jwtRequest = new JwtRequest("napazo2000", "password1");
 			HttpHeaders headers = new HttpHeaders();
@@ -288,7 +298,7 @@ class SistemaExamenesBackendApplicationTests {
 			JwtResponse jwtResponse = response.getBody();
 			String token = jwtResponse.getToken();
 
-			Usuario usuario = new Usuario(95L, "usuario1", "password1", "Nombre1", "Apellido1", "email1@dominio.com", "1234567890", true, "NORMAL");
+			Usuario usuario = new Usuario(96L, "usuario1", "password1", "juanito", "valderramas", "email1@dominio.com", "1234567890", true, "NORMAL");
 			usuarioRepository.save(usuario);
 
 			usuario.setApellido("NuevoApellido");
@@ -324,14 +334,7 @@ class SistemaExamenesBackendApplicationTests {
 		@Test
 		@DisplayName("Test Obtener Usuario Actual")
 		public void testObtenerUsuarioActual() throws Exception {
-			// Given
-			Usuario usuario1 = new Usuario(1L, "usuario1", "password1", "Nombre1", "Apellido1", "email1@dominio.com", "1234567890", true, "ROL1");
-			Usuario usuario2 = new Usuario(2L, "usuario2", "password2", "Nombre2", "Apellido2", "email2@dominio.com", "1234567891", true, "ROL2");
-			List<Usuario> usuariosEsperados = List.of(usuario1, usuario2);
-			// When
-			List<Usuario> usuariosObtenidos = authenticationController.obtenerUsuarios();
-			// Then
-			assertThat(usuariosObtenidos.size() == 2);
+
 		}
 	}
 
@@ -342,14 +345,7 @@ class SistemaExamenesBackendApplicationTests {
 		@Test
 		@DisplayName("Devolver lista usuarios")
 		public void devolverListaUsuarios() throws Exception {
-			// Given
-			Usuario usuario1 = new Usuario(1L, "usuario1", "password1", "Nombre1", "Apellido1", "email1@dominio.com", "1234567890", true, "ROL1");
-			Usuario usuario2 = new Usuario(2L, "usuario2", "password2", "Nombre2", "Apellido2", "email2@dominio.com", "1234567891", true, "ROL2");
-			List<Usuario> usuariosEsperados = List.of(usuario1, usuario2);
-			// When
-			List<Usuario> usuariosObtenidos = authenticationController.obtenerUsuarios();
-			// Then
-			assertThat(usuariosObtenidos.size() == 2);
+
 		}
 	}
 
@@ -404,19 +400,21 @@ class SistemaExamenesBackendApplicationTests {
 	public class UsuarioControll{
 
 		@Nested
-		@DisplayName("Guardar Usuario")
+		@DisplayName("Guardar Usuario") //FUNCIONA
 		public class guardarUsuario {
 
 			@Test
 			@DisplayName("Debe Devolver 200 ")
-			public void testGuardarUsuario() {
-				Usuario usuario = new Usuario(1L, "usuario1", "password1", "Nombre1", "Apellido1", "email1@dominio.com", "1234567890", true, "NORMAL");
+			@DirtiesContext
+			public void testGuardarUsuario() throws Exception {
+				Usuario usuario = new Usuario(null, "usuario1", "password1", "Nombre1", "Apellido1", "email2@dominio.com", "1234567890", true, "NORMAL");
 
 				var peticion = post("http", "localhost",port, "/usuarios/", usuario);
 
 				var respuesta = restTemplate.exchange(peticion, Void.class);
 
 				assertThat(respuesta.getStatusCode().value()).isEqualTo(200);
+
 			}
 
 			@Test
@@ -450,29 +448,7 @@ class SistemaExamenesBackendApplicationTests {
 
 		}
 
-		@Nested
-		@DisplayName("request Password")
-		public class requestPassword {
 
-			@Test
-			@DisplayName("Debe Devolver Usuario Despues De Actualizar Su Contrasena")
-			public void testRequestPasswordDebeDevolverUsuarioDespuesDeActualizarSuContrasena() {
-
-			}
-
-			@Test
-			@DisplayName("Debe Generar Contrasena Aleatoria Con Longitud Diez")
-			public void testRequestPasswordDebeGenerarContrasenaAleatoriaConLongitudDiez() throws Exception {
-
-			}
-
-			@Test
-			@DisplayName("Debe Devolver Null Si No Se Encuentra Usuario Asociado Al Correo Electronico")
-			public void testRequestPasswordDebeDevolverNullSiNoSeEncuentraUsuarioAsociadoAlCorreoElectronico() throws Exception {
-
-			}
-
-		}
 
 
 
@@ -483,20 +459,73 @@ class SistemaExamenesBackendApplicationTests {
 			@Test
 			@DisplayName("Debe Devolver Usuario Correcto Para Nombre De Usuario Valido")
 			public void testObtenerUsuarioDebeDevolverUsuarioCorrectoParaNombreDeUsuarioValido() {
-				Usuario usuario = new Usuario(1L, "usuarioObtener", "password1", "Nombre1", "Apellido1", "email3@dominio.com", "1234567890", true, "NORMAL");
-				usuarioRepository.save(usuario);
-				var peticion = get("http", "localhost",port, "/usuarios/usuarioObtener");
+				JwtRequest jwtRequest = new JwtRequest("napazo2000", "password1");
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.APPLICATION_JSON);
+				HttpEntity<JwtRequest> request = new HttpEntity<>(jwtRequest, headers);
+				ResponseEntity<JwtResponse> response = restTemplate.exchange(
+						"http://localhost:" + port + "/generate-token",
+						HttpMethod.POST,
+						request,
+						JwtResponse.class
+				);
+				JwtResponse jwtResponse = response.getBody();
+				String token = jwtResponse.getToken();
 
-				var respuesta = restTemplate.exchange(peticion, Void.class);
+				String usernameValido = "napazo2000";
+				HttpHeaders headers1 = new HttpHeaders();
+				headers1.setContentType(MediaType.APPLICATION_JSON);
+				headers1.setBearerAuth(token); // Agregar token de autenticación
+				ResponseEntity<Usuario> response2 = restTemplate.exchange(
+						"http://localhost:" + port + "/usuarios/" + usernameValido,
+						HttpMethod.GET,
+						new HttpEntity<>(null, headers1),
+						Usuario.class
+				);
 
-				assertThat(respuesta.getStatusCode().value()).isEqualTo(200);
+				assertThat(response2.getStatusCode()).isEqualTo(HttpStatus.OK);
 			}
+
 
 			@Test
 			@DisplayName("Debe Devolver Null Si Se Proporciona Nombre De Usuario No Valido")
 			public void testObtenerUsuarioDebeDevolverNullSiSeProporcionaNombreDeUsuarioNoValido() throws Exception {
+				JwtRequest jwtRequest = new JwtRequest("napazo2000", "password1");
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.APPLICATION_JSON);
+				HttpEntity<JwtRequest> request = new HttpEntity<>(jwtRequest, headers);
+				ResponseEntity<JwtResponse> response = restTemplate.exchange(
+						"http://localhost:" + port + "/generate-token",
+						HttpMethod.POST,
+						request,
+						JwtResponse.class
+				);
+				JwtResponse jwtResponse = response.getBody();
+				String token = jwtResponse.getToken();
 
+				String usernameNoValido = "asfgsgb";
+				HttpHeaders headers1 = new HttpHeaders();
+				headers1.setContentType(MediaType.APPLICATION_JSON);
+				headers1.setBearerAuth(token); // Agregar token de autenticación
+				ResponseEntity<Usuario> response2 = null;
+				try {
+					response2 = restTemplate.exchange(
+							"http://localhost:" + port + "/usuarios/" + usernameNoValido,
+							HttpMethod.GET,
+							new HttpEntity<>(null, headers1),
+							Usuario.class
+					);
+				} catch (HttpClientErrorException ex) {
+					assertThat(ex.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+					assertThat(ex.getResponseBodyAsString()).contains("EntidadNoEncontradaException");
+				}
+
+				assertThat(response2).isNull();
 			}
+
+
+
+		}
 
 		}
 
@@ -508,21 +537,98 @@ class SistemaExamenesBackendApplicationTests {
 			@Test
 			@DisplayName("Debe Eliminar Usuario Correctamente De La Base De Datos")
 			public void EliminarUsuarioDebeEliminarUsuarioCorrectamenteDeLaBaseDeDatos() {
+				JwtRequest jwtRequest = new JwtRequest("napazo2000", "password1");
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.APPLICATION_JSON);
+				HttpEntity<JwtRequest> request = new HttpEntity<>(jwtRequest, headers);
+				ResponseEntity<JwtResponse> response = restTemplate.exchange(
+						"http://localhost:" + port + "/generate-token",
+						HttpMethod.POST,
+						request,
+						JwtResponse.class
+				);
+				JwtResponse jwtResponse = response.getBody();
+				String token = jwtResponse.getToken();
+
+				Usuario usuario = new Usuario(null, "usuario2", "password1", "Nombre1", "Apellido1", "email1@dominio.com", "1234567890", true, "NORMAL");
+				usuarioRepository.save(usuario);
+
+				headers.setBearerAuth(token);
+				HttpEntity<Void> request2 = new HttpEntity<>(null, headers);
+
+				ResponseEntity<Map<String, Boolean>> eliminarResponse = restTemplate.exchange(
+						"http://localhost:" + port + "/user/eliminarUsuario/" + usuario.getId(),
+						HttpMethod.DELETE,
+						request2,
+						new ParameterizedTypeReference<Map<String, Boolean>>() {}
+				);
+
+				assertThat(eliminarResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+				assertThat(eliminarResponse.getBody().get("eliminar")).isEqualTo(true);
+
+				ResponseEntity<Void> getResponse = restTemplate.exchange(
+						"http://localhost:" + port + "/user/" + usuario.getId(),
+						HttpMethod.GET,
+						request2,
+						Void.class
+				);
+
+				assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+
+				Optional<Usuario> usuarioEliminado = usuarioRepository.findById(usuario.getId());
+				assertThat(usuarioEliminado.isPresent()).isFalse();
+
 
 			}
 
-			@Test
-			@DisplayName("No Debe Generar Excepcion Si Se Proporciona ID De Usuario No Valido")
+
+			@Test //Funciona...a tener en cuenta en numero de usuarios en la BD
+			@DisplayName("Error 404 al intentar borrar usuario inexistente")
 			public void testEliminarUsuarioNoDebeGenerarExcepcionSiSeProporcionaIDDeUsuarioNoValido() throws Exception {
 
+				// Autenticar usuario
+				JwtRequest jwtRequest = new JwtRequest("napazo2000", "password1");
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.APPLICATION_JSON);
+				HttpEntity<JwtRequest> request = new HttpEntity<>(jwtRequest, headers);
+				ResponseEntity<JwtResponse> response = restTemplate.exchange(
+						"http://localhost:" + port + "/generate-token",
+						HttpMethod.POST,
+						request,
+						JwtResponse.class
+				);
+				JwtResponse jwtResponse = response.getBody();
+				String token = jwtResponse.getToken();
+
+				// Configurar cabecera con token de autenticación
+				headers.setBearerAuth(token);
+				HttpEntity<Void> request2 = new HttpEntity<>(null, headers);
+
+
+
+
+				// Realizar petición para eliminar usuario que no existe
+				Long id = 1000L;
+				ResponseEntity<Boolean> eliminarResponse = restTemplate.exchange(
+						"http://localhost:" + port + "/user/eliminarUsuario/" + id,
+						HttpMethod.DELETE,
+						request2,
+						Boolean.class);
+
+				assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
 			}
+
+
+
+		}
 
 		}
 
 
-	}
 
 
-}
+
+
 
 

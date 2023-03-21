@@ -9,6 +9,7 @@ import com.sistema.examenes.servicios.UsuarioService;
 import com.sistema.examenes.servicios.impl.UserDetailsServiceImpl;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -108,13 +109,24 @@ public class AuthenticationController {
 
 
     @DeleteMapping("/user/eliminarUsuario/{id}")
-    public ResponseEntity<Map<String, Boolean>> eliminarUsuario(@PathVariable Long id){
-        Optional<Usuario> usuario = usuarioRepository.findById(id);
-        usuarioRepository.deleteById(id);
-        Map<String ,Boolean> respuesta = new HashMap<>();
-        respuesta.put("eliminar", Boolean.TRUE);
-        return ResponseEntity.ok(respuesta);
+    public ResponseEntity<Boolean> eliminarUsuario(@PathVariable Long id) {
+        try {
+            Optional<Usuario> usuario = usuarioRepository.findById(id);
+            if (usuario.isPresent()) {
+                usuarioRepository.deleteById(id);
+                return ResponseEntity.ok(true);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (EmptyResultDataAccessException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
+
+
+
     @PostMapping("/user/perfil/cambiarClave")
     public ResponseEntity<?> changePassword(@RequestBody Map<String, String> request){
         String email = request.get("email");

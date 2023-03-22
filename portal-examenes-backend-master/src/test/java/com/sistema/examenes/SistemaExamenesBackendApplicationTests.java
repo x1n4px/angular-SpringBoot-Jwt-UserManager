@@ -243,6 +243,17 @@ class SistemaExamenesBackendApplicationTests {
 			);
 			assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
+			Usuario usuario1 = new Usuario(1L, "usuario1", "password1", "Nombre1", "Apellido1", "email1@dominio.com", "1234567890", true, "ROL1");
+			usuarioRepository.save(usuario1);
+
+			var peticion = get("http", "localhost",port, "user/1");
+
+			var respuesta = restTemplate.exchange(peticion,Usuario.class);
+
+
+			assertThat(respuesta.getStatusCode().value()).isEqualTo(200);
+			assertThat(respuesta.hasBody()).isEqualTo(true);
+			assertThat(respuesta.getBody()).isNotNull();
 		}
 
 

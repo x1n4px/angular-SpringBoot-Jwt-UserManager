@@ -2,6 +2,9 @@
   <div id = "overlay">
     <button class = "css-button-3d--blue2"(click)="vistaUsuario()">Vista usuario</button>
   </div>
+  <p class="titulo-tabla">Administradores:</p>
+  
+  
 <table class="center">
   <thead>
     <tr>
@@ -16,16 +19,46 @@
   </thead>
   <tbody>
     <tr *ngFor="let usuario of usuarios">
-      <td>{{ usuario.email }}</td>
-      <td>{{ usuario.username }}</td>
-      <td>{{ usuario.nombre }}</td>
-      <td>{{ usuario.apellido }}</td>
-      <td>{{ usuario.telefono }}</td>
-      <td>{{ usuario.rolAsignado }}</td>
-      <button  (click)="verDetallesUsuario(usuario.id)"   class = "css-button-3d--blue">Editar</button>
-      <button (click) = "eliminarUsuario(usuario.id)" class = "css-button-3d--gray" style = "margin-left : 10px">Eliminar</button>    </tr>
-
+      <ng-container *ngIf="usuario.rolAsignado === 'ADMIN'">
+        <td>{{ usuario.email }}</td>
+        <td>{{ usuario.username }}</td>
+        <td>{{ usuario.nombre }}</td>
+        <td>{{ usuario.apellido }}</td>
+        <td>{{ usuario.telefono }}</td>
+        <td>{{ usuario.rolAsignado }}</td>
+      </ng-container>
+    </tr>
   </tbody>
+  <br>
+  <p class="titulo-tabla">Usuarios:</p>
+
+  <thead>
+    <tr>
+      <th>Correo electrónico</th>
+      <th>Nombre de Usuario</th>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>Telefono</th>
+      <th>Rol Asignado</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let usuario of usuarios">
+      <ng-container *ngIf="usuario.rolAsignado !== 'ADMIN'">
+        <td>{{ usuario.email }}</td>
+        <td>{{ usuario.username }}</td>
+        <td>{{ usuario.nombre }}</td>
+        <td>{{ usuario.apellido }}</td>
+        <td>{{ usuario.telefono }}</td>
+        <td>{{ usuario.rolAsignado }}</td>
+        <button (click)="verDetallesUsuario(usuario.id)" class="css-button-3d--blue">Editar</button>
+        <button (click)="eliminarUsuario(usuario.id)" class="css-button-3d--gray" style="margin-left: 10px">Eliminar</button>
+      </ng-container>
+    </tr>
+  </tbody>
+  
+  
 </table>
 
 </div>

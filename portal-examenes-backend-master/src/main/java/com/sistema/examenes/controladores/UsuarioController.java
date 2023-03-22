@@ -4,6 +4,7 @@ import com.sistema.examenes.modelo.Usuario;
 import com.sistema.examenes.repositorios.UsuarioRepository;
 import com.sistema.examenes.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -80,11 +81,25 @@ public class UsuarioController {
         }
         return sb.toString();
     }
-
+/*
     @GetMapping("/{username}")
     public Usuario obtenerUsuario(@PathVariable("username") String username){
         return usuarioService.obtenerUsuario(username);
     }
+*/
+    @GetMapping("/{username}")
+    public ResponseEntity<Usuario> obtenerUsuario(@PathVariable("username") String username) {
+        try {
+            Usuario usuario = usuarioService.obtenerUsuario(username);
+            if (usuario == null) {
+                return ResponseEntity.badRequest().build();
+            }
+            return ResponseEntity.ok(usuario);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 
 
 

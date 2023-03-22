@@ -51,8 +51,6 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void modificarUsuario(Usuario usuario){
         if(usuarioRepository.existsById(usuario.getId())){
             usuarioRepository.save(usuario);
-
-
         }else{
             throw new RuntimeException();
         }

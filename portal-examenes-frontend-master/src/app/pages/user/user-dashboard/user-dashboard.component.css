@@ -9,9 +9,7 @@ html{
   background-color: #000000;
 }
 
-body{
-  background-color: #eeeaea;
-}
+
 
 .title-name{
   text-align: center;
@@ -103,6 +101,7 @@ body{
   box-shadow: 0 5px #2c0b8e;
   margin: auto;
   margin-bottom: 10px;
+  margin-top: 30px;
 }
 .css-button-3d--blue2:hover {
   box-shadow: 0 3px #2c0b8e;

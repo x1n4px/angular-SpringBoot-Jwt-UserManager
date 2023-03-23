@@ -7,4 +7,5 @@ export class User {
   apellido!: string;
   telefono!: string;
   rolAsignado!:string;
+  confirmacionEliminacion = false;
 }

@@ -29,36 +29,95 @@
       </ng-container>
     </tr>
   </tbody>
-  <br>
-  <p class="titulo-tabla">Usuarios:</p>
-
-  <thead>
-    <tr>
-      <th>Correo electrónico</th>
-      <th>Nombre de Usuario</th>
-      <th>Nombre</th>
-      <th>Apellido</th>
-      <th>Telefono</th>
-      <th>Rol Asignado</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let usuario of usuarios">
-      <ng-container *ngIf="usuario.rolAsignado !== 'ADMIN'">
-        <td>{{ usuario.email }}</td>
-        <td>{{ usuario.username }}</td>
-        <td>{{ usuario.nombre }}</td>
-        <td>{{ usuario.apellido }}</td>
-        <td>{{ usuario.telefono }}</td>
-        <td>{{ usuario.rolAsignado }}</td>
-        <button (click)="verDetallesUsuario(usuario.id)" class="css-button-3d--blue">Editar</button>
-        <button (click)="eliminarUsuario(usuario.id)" class="css-button-3d--gray" style="margin-left: 10px">Eliminar</button>
-      </ng-container>
-    </tr>
-  </tbody>
-  
-  
 </table>
+
+  <br>
+  <p class="titulo-tabla">Usuarios:   </p>
+    <div style="text-align: right">
+    <button (click)="alternarTabla()" class="css-button-3d--blue--ocultar">Ocultar</button>
+    </div>
+ 
+  <table class="center" *ngIf="mostrarTabla">
+    <thead>
+      <tr>
+        <th >Correo electrónico</th>
+        <th >Nombre de Usuario</th>
+        <th >Nombre</th>
+        <th >Apellido</th>
+        <th >Telefono</th>
+        <th >Rol Asignado</th>
+        <th ></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let usuario of usuarios">
+        <ng-container *ngIf="usuario.rolAsignado !== 'ADMIN'">
+          <td>{{ usuario.email }}</td>
+          <td>{{ usuario.username }}</td>
+          <td>{{ usuario.nombre }}</td>
+          <td>{{ usuario.apellido }}</td>
+          <td>{{ usuario.telefono }}</td>
+          <td>{{ usuario.rolAsignado }}</td>
+          <td>
+            <button (click)="verDetallesUsuario(usuario.id)" class="css-button-3d--blue">Editar</button>
+            <button *ngIf="!usuario.confirmacionEliminacion" (click)="usuario.confirmacionEliminacion = true" class="css-button-3d--gray" style="margin-left: 10px">Eliminar</button>
+  
+            <div *ngIf="usuario.confirmacionEliminacion" class="confirmacion-eliminacion">
+              <p>¿Estás seguro que deseas eliminar a {{ usuario.nombre }}?</p>
+              <button (click)="eliminarUsuario(usuario.id); usuario.confirmacionEliminacion = false" class="css-button-3d--gray">Sí, eliminar</button>
+              <button (click)="usuario.confirmacionEliminacion = false" class="css-button-3d--blue">Cancelar</button>
+            </div>
+          </td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+
+  <br>
+  <p class="titulo-tabla">VIGILANTE:   </p>
+    <div style="text-align: right">
+    <button (click)="alternarTabla()" class="css-button-3d--blue--ocultar">Ocultar</button>
+    </div>
+
+
+  <table class="center" >
+    <thead>
+      <tr>
+        <th >Correo electrónico</th>
+        <th >Nombre de Usuario</th>
+        <th >Nombre</th>
+        <th >Apellido</th>
+        <th >Telefono</th>
+        <th >Rol Asignado</th>
+        <th ></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let usuario of usuarios">
+        <ng-container *ngIf="usuario.rolAsignado === 'VIGILANTE' ">
+          <td>{{ usuario.email }}</td>
+          <td>{{ usuario.username }}</td>
+          <td>{{ usuario.nombre }}</td>
+          <td>{{ usuario.apellido }}</td>
+          <td>{{ usuario.telefono }}</td>
+          <td>{{ usuario.rolAsignado }}</td>
+          <td>
+            <button (click)="verDetallesUsuario(usuario.id)" class="css-button-3d--blue">Editar</button>
+            <button *ngIf="!usuario.confirmacionEliminacion" (click)="usuario.confirmacionEliminacion = true" class="css-button-3d--gray" style="margin-left: 10px">Eliminar</button>
+  
+            <div *ngIf="usuario.confirmacionEliminacion" class="confirmacion-eliminacion">
+              <p>¿Estás seguro que deseas eliminar a {{ usuario.nombre }}?</p>
+              <button (click)="eliminarUsuario(usuario.id); usuario.confirmacionEliminacion = false" class="css-button-3d--gray">Sí, eliminar</button>
+              <button (click)="usuario.confirmacionEliminacion = false" class="css-button-3d--blue">Cancelar</button>
+            </div>
+          </td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+  
+
+  
+  
 
 </div>

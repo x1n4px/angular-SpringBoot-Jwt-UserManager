@@ -1,3 +1,10 @@
 .full-width{
   width: 100%;;
 }
+
+.buttonD{
+
+  margin-left: 20px;
+  text-align: right;
+  text-decoration: none;
+}

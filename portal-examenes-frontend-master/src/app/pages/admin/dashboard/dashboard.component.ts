@@ -11,6 +11,9 @@ import { User } from 'src/app/User';
 export class DashboardComponent implements OnInit {
 
   usuarios: User[] = [];
+  confirmacionEliminacion = false;
+  mostrarTabla: boolean = true;
+
 
   constructor(private loginService: LoginService, private route: Router) { }
 
@@ -51,4 +54,14 @@ export class DashboardComponent implements OnInit {
   vistaUsuario(){
     this.route.navigate(['user-dashboard']);
   }
+
+
+  activarConfirmacionEliminacion() {
+    this.confirmacionEliminacion = true;
+  }
+  
+  alternarTabla(): void {
+    this.mostrarTabla = !this.mostrarTabla;
+  }
+
 }

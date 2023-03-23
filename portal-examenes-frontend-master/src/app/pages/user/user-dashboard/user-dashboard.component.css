@@ -81,7 +81,9 @@ html{
 .card.MS2:hover{
   background-color: #919191;
 }
-
+.card.MS:hover{
+  background-color: #1a9134;
+}
 
 .css-button-3d--blue2 {
   min-width: 300px;

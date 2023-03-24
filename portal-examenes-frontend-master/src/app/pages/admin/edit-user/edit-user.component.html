@@ -20,11 +20,13 @@
       <select id="rol" name="rol" [(ngModel)]="usuario.rolAsignado" required>
         <option value="">- Seleccione una opción -</option>
         <option value="ADMIN">ADMIN</option>
-        <option value="NORMAL">NORMAL</option>
-        <option value="RSEDE">RESPONSABLE DE SEDE</option>
-        <option value="CORRECTOR">CORRECTOR</option>
+        <option value="NORMAL">ESTUDIANTE</option>
+        <option value="VOCAL">VOCAL</option>
+        <option value="RESPONSABLESEDE">RESPONSABLE DE SEDE</option>
+        <option value="RESPONSABLEAULA">RESPONSABLE DE AULA</option>
         <option value="VICERRECTOR">VICERRECTOR</option>
-        <option value="VIGILANTE">VIGILANTE DE AULA</option>
+        <option value="VIGILANTEAULA">VIGILANTE DE AULA</option>
+        <option value="PSERVICIO">Personal del Servicio de Acceso del Vicerrectorado de Estudiantes y Deportes</option>
       </select>
       <div style="text-align: center;">
         <button class="css-button-3d--blue">Enviar</button> <br>

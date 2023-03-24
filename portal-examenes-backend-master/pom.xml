@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>com.sistema.examen</groupId>
 	<artifactId>sistema-examenes-backend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>sistema-examenes-backend</name>
-	<description>Demo project for Spring Boot</description>
+	<version>1.0.0</version>
+	<name>MS1 Gestion de usuarios</name>
+	<description>MS1 Gestion de usuarios</description>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
@@ -76,6 +76,14 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+
+		<dependency>
+			<groupId>com.kageiit</groupId>
+			<artifactId>jacobo-plugin</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
@@ -92,6 +100,31 @@
 					<source>9</source>
 					<target>9</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.8</version>
+				<configuration>
+					<excludes>
+						<exclude>com/sistema/examenes/SistemaExamenesBackendApplication.class</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<id>prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+
 			</plugin>
 		</plugins>
 	</build>

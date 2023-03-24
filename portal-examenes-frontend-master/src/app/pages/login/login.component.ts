@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
           this.loginService.setUser(user);
           console.log(user);
 
-          if(this.loginService.getUserRole() == 'ADMIN'){
+          if(this.loginService.getUserRole() != 'NORMAL'  ){
             //dashboard admin
             //window.location.href = '/admin';
             this.router.navigate(['admin']);

@@ -38,7 +38,7 @@ public class UsuarioController {
     }
 
 
-
+/*
     //MICROSERVICIO DE NOTIFICACIONES
     @PostMapping("/requestNewPassword")
     public Usuario requestPassword(@RequestBody Map<String, String> emailBody, HttpServletResponse response) {
@@ -54,7 +54,7 @@ public class UsuarioController {
         //microservicio notificaciones
         String subject = "Nueva contraseña generada";
         String message = "Su nueva contraseña es: " + newPassword;
-        /*
+
         MICROSERVICIO DE NOTIFICACIONES
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
@@ -63,11 +63,10 @@ public class UsuarioController {
         mailMessage.setSubject(subject);
         mailMessage.setText(message);
         javaMailSender.send(mailMessage);
-        */
+
 
         return usuario;
     }
-
 
 
 
@@ -81,23 +80,19 @@ public class UsuarioController {
         }
         return sb.toString();
     }
-/*
-    @GetMapping("/{username}")
-    public Usuario obtenerUsuario(@PathVariable("username") String username){
-        return usuarioService.obtenerUsuario(username);
-    }
-*/
+    */
+
     @GetMapping("/{username}")
     public ResponseEntity<Usuario> obtenerUsuario(@PathVariable("username") String username) {
-        try {
+       // try {
             Usuario usuario = usuarioService.obtenerUsuario(username);
             if (usuario == null) {
                 return ResponseEntity.badRequest().build();
             }
             return ResponseEntity.ok(usuario);
-        } catch (Exception e) {
+      /*  } catch (Exception e) {
             return ResponseEntity.badRequest().build();
-        }
+        }*/
     }
 
 

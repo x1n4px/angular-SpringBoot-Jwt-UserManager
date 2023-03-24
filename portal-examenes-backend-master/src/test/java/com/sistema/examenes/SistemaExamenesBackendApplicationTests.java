@@ -7,12 +7,16 @@ import com.sistema.examenes.modelo.JwtResponse;
 import com.sistema.examenes.modelo.Usuario;
 import com.sistema.examenes.repositorios.UsuarioRepository;
 import com.sistema.examenes.servicios.UsuarioService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.var;
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +27,7 @@ import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.client.HttpClientErrorException;
@@ -37,6 +42,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.net.URI;
 import java.util.*;
@@ -58,6 +64,8 @@ class SistemaExamenesBackendApplicationTests {
 
 	@Autowired
 	private UsuarioController usuarioController;
+
+
 
 	private final BCryptPasswordEncoder encoder2 = new BCryptPasswordEncoder();
 
@@ -123,6 +131,7 @@ class SistemaExamenesBackendApplicationTests {
 		@DisplayName("Generar Token") //FUNCIONANDO
 		public class generarToken {
 
+
 			@Test
 			@DisplayName("Test Generar Token")
 			public void testGenerarToken() {
@@ -167,24 +176,61 @@ class SistemaExamenesBackendApplicationTests {
 			}
 
 			@Test
-			@DisplayName("test Generar Token Con Usuario Deshabilitado")
-			public void testGenerarTokenConUsuarioDeshabilitado() throws Exception {
-//loginData = username, password
-				JwtRequest jwtRequest = new JwtRequest("napazo2000", "password2");
+			@DisplayName("Test Generar Token con usuario inexistente")
+			public void testGenerarTokenUsuarioInexistente() {
+
+				// Intentamos autenticar un usuario que no existe
+				JwtRequest jwtRequest = new JwtRequest("nonexistentuser", "password");
 				HttpHeaders headers = new HttpHeaders();
 				headers.setContentType(MediaType.APPLICATION_JSON);
 				HttpEntity<JwtRequest> request = new HttpEntity<>(jwtRequest, headers);
+
+				// Enviamos la solicitud y esperamos la respuesta
 				ResponseEntity<JwtResponse> response = restTemplate.exchange(
 						"http://localhost:" + port + "/generate-token",
 						HttpMethod.POST,
 						request,
 						JwtResponse.class
 				);
-				JwtResponse jwtResponse = response.getBody();
-				String token = jwtResponse.getToken();
 
-				assertThat(response.badRequest().body("Usuario no encontrado"));
+				// Verificamos que se haya devuelto un estado 404 (Not Found)
+				assertThat(response.getStatusCode().value()).isEqualTo(404);
 			}
+
+			@Test
+			@DisplayName("Test de Expiración de Token")
+			public void testTokenExpired() throws Exception {
+				// Crear usuario
+				String username = "usuario_" + UUID.randomUUID().toString();
+				String email = UUID.randomUUID().toString() + "@dominio.com";
+				Usuario usuario = new Usuario(null, username, "password1", "Nombre1", "valderramas", email, "1234567890", true, "NORMAL");
+				usuarioRepository.save(usuario);
+
+				// Generar token de JWT con fecha de expiración anterior a la fecha actual
+				Date expirationDate = new Date(System.currentTimeMillis() - 1000);
+				String token = Jwts.builder()
+						.setSubject(username)
+						.setIssuedAt(new Date())
+						.setExpiration(expirationDate)
+						.signWith(SignatureAlgorithm.HS512, "claveSecreta")
+						.compact();
+
+				// Realizar solicitud GET con el token expirado en la cabecera de autorización
+				HttpHeaders headers = new HttpHeaders();
+				headers.setBearerAuth(token);
+				HttpEntity<String> request = new HttpEntity<>(null, headers);
+
+				ResponseEntity<String> response = restTemplate.exchange(
+						"http://localhost:" + port + "/user/actual",
+						HttpMethod.GET,
+						request,
+						String.class
+				);
+
+				// Verificar que se devuelva un error 401 sin autenticación
+				assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+			}
+
 
 		}
 
@@ -218,7 +264,7 @@ class SistemaExamenesBackendApplicationTests {
 				headers2.setContentType(MediaType.APPLICATION_JSON);
 				headers2.setBearerAuth(token);
 				HttpEntity<Optional<Usuario>> request2 = new HttpEntity<>(null, headers2);
-				ResponseEntity<Optional<Usuario>> response2 = restTemplate.exchange("http://localhost:" + port + "/user/29",
+				ResponseEntity<Optional<Usuario>> response2 = restTemplate.exchange("http://localhost:" + port + "/user/3",
 						HttpMethod.GET,
 						request2,
 						new ParameterizedTypeReference<Optional<Usuario>>() {
@@ -231,7 +277,7 @@ class SistemaExamenesBackendApplicationTests {
 				// Verificar que la respuesta contiene un usuario y que su ID es igual a 1
 				Optional<Usuario> usuarioResponse = response2.getBody();
 				assertThat(usuarioResponse.isPresent()).isTrue();
-				assertThat(usuarioResponse.get().getId()).isEqualTo(29L);
+				assertThat(usuarioResponse.get().getId()).isEqualTo(3L);
 			}
 
 
@@ -406,6 +452,50 @@ class SistemaExamenesBackendApplicationTests {
 				Usuario usuario = response2.getBody();
 				assertThat(usuario.getUsername()).isEqualTo("napazo2000");
 			}
+
+			@Test
+			@DisplayName("Test error al Obtener Usuario Actual ")
+			public void testObtenerErrorUsuarioActual() throws Exception {
+				String username = "usuaOO_" + UUID.randomUUID().toString();
+				String email = UUID.randomUUID().toString() + "@dominio.com";
+				Usuario usuario = new Usuario(null, username, "password1", "Nombre1", "valderramas", email, "1234567890", true, "NORMAL");
+				usuarioRepository.save(usuario);
+
+				// Obtener token válido
+				JwtRequest jwtRequest = new JwtRequest(username, "password1");
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.APPLICATION_JSON);
+				HttpEntity<JwtRequest> request = new HttpEntity<>(jwtRequest, headers);
+				ResponseEntity<JwtResponse> response = restTemplate.exchange(
+						"http://localhost:" + port + "/generate-token",
+						HttpMethod.POST,
+						request,
+						JwtResponse.class
+				);
+				JwtResponse jwtResponse = response.getBody();
+				String token = jwtResponse.getToken();
+
+				usuarioRepository.delete(usuario);
+
+				// Realizar solicitud GET con token nulo
+				HttpHeaders headers2 = new HttpHeaders();
+				headers2.setContentType(MediaType.APPLICATION_JSON);
+				headers2.setBearerAuth(token);
+				HttpEntity<String> request2 = new HttpEntity<>(null, headers2);
+
+				ResponseEntity<Usuario> response2 = restTemplate.exchange(
+						"http://localhost:" + port + "/user/actual?username=" + username,
+						HttpMethod.GET,
+						request2,
+						Usuario.class
+				);
+
+				// Verificar que se devuelva un error
+				assertThat(response2.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+
+			}
+
+
 		}
 
 		@Nested
@@ -695,6 +785,7 @@ class SistemaExamenesBackendApplicationTests {
 			}
 
 		}
+
 
 
 	}

@@ -14,7 +14,7 @@ public interface UsuarioService {
     public Optional<Usuario> obtenerUsuarioPorId(Long id);
 
 
-    public void eliminarUsuario(Long usuarioId);
+   // public void eliminarUsuario(Long usuarioId);
 
     public List<Usuario> obtenerUsuarios();
 

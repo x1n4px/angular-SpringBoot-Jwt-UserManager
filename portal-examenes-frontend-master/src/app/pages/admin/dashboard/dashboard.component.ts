@@ -12,7 +12,14 @@ export class DashboardComponent implements OnInit {
 
   usuarios: User[] = [];
   confirmacionEliminacion = false;
-  mostrarTabla: boolean = true;
+  mostrarTablaUsuarios: boolean = false;
+  mostrarTablaVigiantes: boolean = false;
+  mostrarTablaAdmin: boolean = false;
+  mostrarTablaRAULA:boolean = false;
+  mostrarTablaPServicio:boolean = false;
+  mostrarTablaRSEDES:boolean = false;
+  mostrarTablaVocal: boolean = false;
+  usuarioActual: any;
 
 
   constructor(private loginService: LoginService, private route: Router) { }
@@ -26,6 +33,9 @@ export class DashboardComponent implements OnInit {
         console.log(error);
       }
     );
+    this.loginService.getCurrentUser().subscribe(data => {
+      this.usuarioActual = data;
+    });
   }
 
   eliminarUsuario(id:number){
@@ -59,9 +69,30 @@ export class DashboardComponent implements OnInit {
   activarConfirmacionEliminacion() {
     this.confirmacionEliminacion = true;
   }
-  
-  alternarTabla(): void {
-    this.mostrarTabla = !this.mostrarTabla;
+
+  alternarTablaUsuario(): void {
+    this.mostrarTablaUsuarios = !this.mostrarTablaUsuarios;
   }
 
+  alternarTablaVigilantes():void{
+    this.mostrarTablaVigiantes = !this.mostrarTablaVigiantes;
+  }
+
+  mostrarTablaAdministradores():void{
+    this.mostrarTablaAdmin = !this.mostrarTablaAdmin;
+  }
+
+  alternarTablaVocal():void{
+    this.mostrarTablaVocal = !this.mostrarTablaVocal;
+  }
+
+  alternarTablaRSEDES():void{
+    this.mostrarTablaRSEDES = !this.mostrarTablaRSEDES;
+  }
+  alternarTablaRAULA():void{
+    this.mostrarTablaRAULA = !this.mostrarTablaRAULA;
+  }
+  alternarTablaPServicio():void{
+    this.mostrarTablaPServicio = !this.mostrarTablaPServicio;
+  }
 }

@@ -122,7 +122,9 @@ table.center {
     display: flex;
   }
 
-
+.info {
+  margin: 20px;
+}
   .css-button-3d--blue {
     min-width: 130px;
     height: 30px;
@@ -138,6 +140,7 @@ table.center {
     border: none;
     background: #337ab7;
     box-shadow: 0 5px #2c0b8e;
+    margin: 10px;
   }
   .css-button-3d--blue:hover {
     box-shadow: 0 3px #2c0b8e;
@@ -185,30 +188,30 @@ table.center {
     margin-top: 10px;
     margin-bottom: 15px;
   }
-  
+
   .confirmacion-eliminacion p {
     margin-bottom: 10px;
   }
-  
+
   .css-button-3d--red {
     background: #cf3333;
     box-shadow: 0 5px #2c0b8e;
   }
-  
+
   .css-button-3d--red:hover {
     transform: scale(1);
     box-shadow: 0 3px #2c0b8e;
     top: 1px;
     z-index: 1;
   }
-  
+
   .css-button-3d--red:active {
     box-shadow: 0 0 #2c0b8e;
     top: 5px;
   }
-  
 
-  
+
+
 
 
   .css-button-3d--blue2 {
@@ -278,6 +281,10 @@ table.center {
 
 hr{
   box-shadow: 0 5px 10px #ccd0da;
-  
 
+
+}
+
+.Nombre-titulo{
+  padding: 20px;
 }

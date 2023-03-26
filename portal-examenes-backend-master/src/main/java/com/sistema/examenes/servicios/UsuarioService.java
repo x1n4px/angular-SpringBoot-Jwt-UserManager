@@ -11,6 +11,7 @@ public interface UsuarioService {
     public Usuario guardarClave(Usuario usuario);
 
     public Usuario obtenerUsuario(String username);
+    public Usuario obtenerEmail(String email);
     public Optional<Usuario> obtenerUsuarioPorId(Long id);
 
 

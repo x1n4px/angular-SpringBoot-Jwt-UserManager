@@ -20,6 +20,9 @@ export class DashboardComponent implements OnInit {
   mostrarTablaRSEDES:boolean = false;
   mostrarTablaVocal: boolean = false;
   usuarioActual: any;
+  terminoBusqueda!: string;
+  resultados!: any[];
+
 
 
   constructor(private loginService: LoginService, private route: Router) { }
@@ -37,6 +40,20 @@ export class DashboardComponent implements OnInit {
       this.usuarioActual = data;
     });
   }
+
+  buscar() {
+    if (this.terminoBusqueda && this.terminoBusqueda.trim()) {
+      this.resultados = this.usuarios.filter((usuario) => {
+        const termino = this.terminoBusqueda.toLowerCase();
+        return usuario.nombre.toLowerCase().includes(termino) || usuario.apellido.toLowerCase().includes(termino) || usuario.rolAsignado.toLowerCase().includes(termino) ;
+      });
+    } else {
+      this.resultados = [];
+    }
+  }
+
+
+
 
   eliminarUsuario(id:number){
     this.loginService.eliminarUsuario(id).subscribe(dato =>{

@@ -10,8 +10,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -38,13 +38,17 @@ public class UsuarioController {
     }
 
 
-/*
+
     //MICROSERVICIO DE NOTIFICACIONES
+
     @PostMapping("/requestNewPassword")
     public Usuario requestPassword(@RequestBody Map<String, String> emailBody, HttpServletResponse response) {
         response.setHeader("Access-Control-Allow-Origin", "*"); //maybe redundant function (Header implements)
         String email = emailBody.get("email");
-        Usuario usuario = usuarioRepository.findByEmail(email);
+        Usuario usuario = usuarioService.obtenerEmail(email);
+        if (usuario == null) {
+            throw new RuntimeException("El usuario no existe"); // Agregar una excepción en caso de que el usuario no exista
+        }
 
         String newPassword = generateRandomPassword();
         String cipherPassword = encoder2.encode(newPassword);
@@ -54,19 +58,20 @@ public class UsuarioController {
         //microservicio notificaciones
         String subject = "Nueva contraseña generada";
         String message = "Su nueva contraseña es: " + newPassword;
-
-        MICROSERVICIO DE NOTIFICACIONES
-
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setFrom("silosabia3@gmail.com");
-        mailMessage.setTo(email);
-        mailMessage.setSubject(subject);
-        mailMessage.setText(message);
-        javaMailSender.send(mailMessage);
-
+    /*
+    MICROSERVICIO DE NOTIFICACIONES
+    SimpleMailMessage mailMessage = new SimpleMailMessage();
+    mailMessage.setFrom("silosabia3@gmail.com");
+    mailMessage.setTo(email);
+    mailMessage.setSubject(subject);
+    mailMessage.setText(message);
+    javaMailSender.send(mailMessage);
+    */
 
         return usuario;
     }
+
+
 
 
 
@@ -80,7 +85,7 @@ public class UsuarioController {
         }
         return sb.toString();
     }
-    */
+
 
     @GetMapping("/{username}")
     public ResponseEntity<Usuario> obtenerUsuario(@PathVariable("username") String username) {

@@ -18,9 +18,11 @@ export class ChangePassNoLoginComponent implements OnInit {
   }
 
   requestNewPassword(){
+    console.log(this.email)
     this.loginService.requestNewPassword(this.email).subscribe(
       data => {
         console.log('Solicitada la nueva clave');
+        this.route.navigate(['']);
       },
       (error) => console.log(error)
       );

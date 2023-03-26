@@ -25,6 +25,11 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuario;
     }
 
+    @Override
+    public Usuario obtenerEmail(String email) {
+        return usuarioRepository.findByEmail(email);
+    }
+
     public Optional<Usuario> obtenerUsuarioPorId(Long id){return usuarioRepository.findById(id);}
 
     public Usuario guardarClave(Usuario usuario){return usuarioRepository.save(usuario);}

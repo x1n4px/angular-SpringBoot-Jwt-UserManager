@@ -1,0 +1,377 @@
+
+
+<ng-container *ngIf="usuarioActual.rolAsignado === 'VOCAL'">
+  <h1 class="Nombre-titulo">Bienvenido {{ usuarioActual.nombre }},{{ usuarioActual.apellido }}</h1>
+
+  <p class = "info">Los vigilantes solo serán aquellos que la sede coincida con la sede del VOCAL<br>
+    A su vez, los botones de reasignar y dejar de ser vigilantes, también vendra dada por su funcionalidad con otro microservicio-
+
+  </p>
+<p class="titulo-tabla">Viligantes:
+   <button  class="css-button-3d--blue" >Añadir</button>
+</p>
+
+<table class="center">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>Telefono</th>
+      <th>Aula asignada</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let usuario of usuarios">
+      <ng-container *ngIf="usuario.rolAsignado === 'VIGILANTE'">
+        <td>{{ usuario.nombre }}</td>
+        <td>{{ usuario.apellido }}</td>
+        <td>{{ usuario.telefono }}</td>
+        <td></td>
+        <td>
+          <!--Funcionalidad con microservicio de gestor de vigilantes-->
+          <button  class="css-button-3d--blue">Reasignar</button>
+          <button *ngIf="!usuario.confirmacionEliminacion"  class="css-button-3d--gray" style="margin-left: 10px">Dejar de ser vigilante</button>
+          <div *ngIf="usuario.confirmacionEliminacion" class="confirmacion-eliminacion">
+            <p>¿Estás seguro que deseas eliminar a {{ usuario.nombre }}?</p>
+            <button (click)="eliminarUsuario(usuario.id); usuario.confirmacionEliminacion = false" class="css-button-3d--gray">Sí, eliminar</button>
+            <button (click)="usuario.confirmacionEliminacion = false" class="css-button-3d--blue">Cancelar</button>
+          </div>
+        </td>
+      </ng-container>
+    </tr>
+  </tbody>
+</table>
+
+</ng-container>
+
+
+
+<ng-container *ngIf="usuarioActual.rolAsignado === 'RESPONSABLESEDE'">
+
+  <p class = "info">Los vigilantes solo serán aquellos que la sede coincida con la sede del VOCAL<br>
+    A su vez, los botones de reasignar y dejar de ser vigilantes, también vendra dada por su funcionalidad con otro microservicio-
+    Además, también podra modificar los datos de su sede
+  </p>
+  <p class="titulo-tabla">Aulas:
+    <button  class="css-button-3d--blue" >Modificar</button>
+ </p>
+  <table class="center">
+    <thead>
+      <tr>
+        <th>Código</th>
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Reponsable</th>
+        <th>Secretario</th>
+      </tr>
+    </thead>
+  </table>
+
+  <p class="titulo-tabla">Viligantes:
+     <button  class="css-button-3d--blue" >Añadir</button>
+  </p>
+
+  <table class="center">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Telefono</th>
+        <th>Aula asignada</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let usuario of usuarios">
+        <ng-container *ngIf="usuario.rolAsignado === 'VIGILANTE'">
+          <td>{{ usuario.nombre }}</td>
+          <td>{{ usuario.apellido }}</td>
+          <td>{{ usuario.telefono }}</td>
+          <td></td>
+          <td>
+            <!--Funcionalidad con microservicio de gestor de vigilantes-->
+            <button  class="css-button-3d--blue">Reasignar</button>
+            <button *ngIf="!usuario.confirmacionEliminacion"  class="css-button-3d--gray" style="margin-left: 10px">Dejar de ser vigilante</button>
+            <div *ngIf="usuario.confirmacionEliminacion" class="confirmacion-eliminacion">
+              <p>¿Estás seguro que deseas eliminar a {{ usuario.nombre }}?</p>
+              <button (click)="eliminarUsuario(usuario.id); usuario.confirmacionEliminacion = false" class="css-button-3d--gray">Sí, eliminar</button>
+              <button (click)="usuario.confirmacionEliminacion = false" class="css-button-3d--blue">Cancelar</button>
+            </div>
+          </td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="titulo-tabla">Responsables de aula:
+    <button  class="css-button-3d--blue" >Añadir</button>
+ </p>
+
+ <table class="center">
+   <thead>
+     <tr>
+       <th>Nombre</th>
+       <th>Apellido</th>
+       <th>Telefono</th>
+       <th>Aula asignada</th>
+       <th></th>
+     </tr>
+   </thead>
+   <tbody>
+     <tr *ngFor="let usuario of usuarios">
+       <ng-container *ngIf="usuario.rolAsignado === 'RESPONSABLEAULA'">
+         <td>{{ usuario.nombre }}</td>
+         <td>{{ usuario.apellido }}</td>
+         <td>{{ usuario.telefono }}</td>
+         <td></td>
+         <td>
+           <!--Funcionalidad con microservicio de gestor de vigilantes-->
+           <button  class="css-button-3d--blue">Reasignar</button>
+           <button *ngIf="!usuario.confirmacionEliminacion"  class="css-button-3d--gray" style="margin-left: 10px">Dejar de ser vigilante</button>
+           <div *ngIf="usuario.confirmacionEliminacion" class="confirmacion-eliminacion">
+             <p>¿Estás seguro que deseas eliminar a {{ usuario.nombre }}?</p>
+             <button (click)="eliminarUsuario(usuario.id); usuario.confirmacionEliminacion = false" class="css-button-3d--gray">Sí, eliminar</button>
+             <button (click)="usuario.confirmacionEliminacion = false" class="css-button-3d--blue">Cancelar</button>
+           </div>
+         </td>
+       </ng-container>
+     </tr>
+   </tbody>
+ </table>
+
+ <p class="titulo-tabla">Vocal:
+  <button  class="css-button-3d--blue" >Añadir</button>
+</p>
+
+<table class="center">
+ <thead>
+   <tr>
+     <th>Nombre</th>
+     <th>Apellido</th>
+     <th>Telefono</th>
+     <th>Aula asignada</th>
+     <th></th>
+   </tr>
+ </thead>
+ <tbody>
+   <tr *ngFor="let usuario of usuarios">
+     <ng-container *ngIf="usuario.rolAsignado === 'VOCAL'">
+       <td>{{ usuario.nombre }}</td>
+       <td>{{ usuario.apellido }}</td>
+       <td>{{ usuario.telefono }}</td>
+       <td></td>
+       <td>
+         <!--Funcionalidad con microservicio de gestor de vigilantes-->
+         <button  class="css-button-3d--blue">Reasignar</button>
+         <button *ngIf="!usuario.confirmacionEliminacion"  class="css-button-3d--gray" style="margin-left: 10px">Dejar de ser vigilante</button>
+         <div *ngIf="usuario.confirmacionEliminacion" class="confirmacion-eliminacion">
+           <p>¿Estás seguro que deseas eliminar a {{ usuario.nombre }}?</p>
+           <button (click)="eliminarUsuario(usuario.id); usuario.confirmacionEliminacion = false" class="css-button-3d--gray">Sí, eliminar</button>
+           <button (click)="usuario.confirmacionEliminacion = false" class="css-button-3d--blue">Cancelar</button>
+         </div>
+       </td>
+     </ng-container>
+   </tr>
+ </tbody>
+</table>
+
+<p class="titulo-tabla">Estudiantes:
+  <button  class="css-button-3d--blue" >Añadir</button>
+</p>
+
+<table class="center">
+ <thead>
+   <tr>
+     <th>Nombre</th>
+     <th>Apellido</th>
+     <th>Telefono</th>
+     <th>Aula asignada</th>
+     <th></th>
+   </tr>
+ </thead>
+ <tbody>
+   <tr *ngFor="let usuario of usuarios">
+     <ng-container *ngIf="usuario.rolAsignado === 'NORMAL'">
+       <td>{{ usuario.nombre }}</td>
+       <td>{{ usuario.apellido }}</td>
+       <td>{{ usuario.telefono }}</td>
+       <td></td>
+       <td>
+         <!--Funcionalidad con microservicio de gestor de vigilantes-->
+         <button  class="css-button-3d--blue">Reasignar</button>
+         <button *ngIf="!usuario.confirmacionEliminacion"  class="css-button-3d--gray" style="margin-left: 10px">Dejar de ser vigilante</button>
+         <div *ngIf="usuario.confirmacionEliminacion" class="confirmacion-eliminacion">
+           <p>¿Estás seguro que deseas eliminar a {{ usuario.nombre }}?</p>
+           <button (click)="eliminarUsuario(usuario.id); usuario.confirmacionEliminacion = false" class="css-button-3d--gray">Sí, eliminar</button>
+           <button (click)="usuario.confirmacionEliminacion = false" class="css-button-3d--blue">Cancelar</button>
+         </div>
+       </td>
+     </ng-container>
+   </tr>
+ </tbody>
+</table>
+
+  </ng-container>
+
+
+  <ng-container *ngIf="usuarioActual.rolAsignado === 'RESPONSABLEAULA'">
+
+    <h1 class="Nombre-titulo">Bienvenido {{ usuarioActual.nombre }},{{ usuarioActual.apellido }}</h1>
+
+    <p class="titulo-tabla">Tu asignación de aula:</p>
+
+  <table class="center">
+    <thead>
+        <th>Examen</th>
+        <th>Aula asignada: </th>
+        <th>Horario:</th>
+    </thead>
+    <tbody>
+          <td>Matemáticas</td>
+          <td>7 A</td>
+          <td>10:30 - 12:30</td>
+    </tbody>
+  </table>
+
+
+
+
+
+  </ng-container>
+
+
+
+  <ng-container *ngIf="usuarioActual.rolAsignado === 'PSERVICIO'">
+    <h1 class="Nombre-titulo">Bienvenido {{ usuarioActual.nombre }},{{ usuarioActual.apellido }}</h1>
+
+    <p class = "info">Los vigilantes solo serán aquellos que la sede coincida con la sede del VOCAL<br>
+      A su vez, los botones de reasignar y dejar de ser vigilantes, también vendra dada por su funcionalidad con otro microservicio-
+
+    </p>
+  <p class="titulo-tabla">Responsables de sede:
+     <button  class="css-button-3d--blue" >Añadir</button>
+  </p>
+
+  <table class="center">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Telefono</th>
+        <th>Sede asignada</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let usuario of usuarios">
+        <ng-container *ngIf="usuario.rolAsignado === 'RESPONSABLESEDE'">
+          <td>{{ usuario.nombre }}</td>
+          <td>{{ usuario.apellido }}</td>
+          <td>{{ usuario.telefono }}</td>
+          <td></td>
+          <td>
+            <!--Funcionalidad con microservicio de gestor de vigilantes-->
+            <button  class="css-button-3d--blue">Reasignar</button>
+
+          </td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+
+  </ng-container>
+
+
+
+
+  <ng-container *ngIf="usuarioActual.rolAsignado === 'VICERRECTOR'">
+    <h1 class="Nombre-titulo">Bienvenido {{ usuarioActual.nombre }},{{ usuarioActual.apellido }}</h1>
+
+    <p class = "info">Los vigilantes solo serán aquellos que la sede coincida con la sede del VOCAL<br>
+      A su vez, los botones de reasignar y dejar de ser vigilantes, también vendra dada por su funcionalidad con otro microservicio-
+
+    </p>
+  <p class="titulo-tabla">Correctores:
+     <button  class="css-button-3d--blue" >Añadir</button>
+  </p>
+
+  <table class="center">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Examen</th>
+        <th>Fecha de Examen</th>
+        <th>Fecha límite de corrección</th>
+        <th>Fecha límite de revisión</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let usuario of usuarios">
+        <ng-container *ngIf="usuario.rolAsignado === 'RESPONSABLESEDE'">
+          <td>{{ usuario.nombre }}</td>
+          <td>Matematicas</td>
+          <td>09/03/2023</td>
+          <td>12/03/2023</td>
+          <td>30/03/2023</td>
+          <td>
+            <!--Funcionalidad con microservicio de gestor de vigilantes-->
+            <button (click)="verDetallesUsuario(usuario.id)" class="css-button-3d--blue">Editar</button>
+            <button *ngIf="!usuario.confirmacionEliminacion" (click)="usuario.confirmacionEliminacion = true" class="css-button-3d--gray" style="margin-left: 10px">Eliminar</button>
+
+            <div *ngIf="usuario.confirmacionEliminacion" class="confirmacion-eliminacion">
+              <p>¿Estás seguro que deseas eliminar a {{ usuario.nombre }}?</p>
+              <button (click)="eliminarUsuario(usuario.id); usuario.confirmacionEliminacion = false" class="css-button-3d--gray">Sí, eliminar</button>
+              <button (click)="usuario.confirmacionEliminacion = false" class="css-button-3d--blue">Cancelar</button>
+            </div>
+
+          </td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="titulo-tabla">Sede:
+    <button  class="css-button-3d--blue" >Añadir</button>
+ </p>
+ <table class="center">
+  <thead>
+    <tr>
+      <th>Id </th>
+      <th>Nombre</th>
+      <th>Dirección</th>
+      <th>Tipo</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let usuario of usuarios">
+      <ng-container *ngIf="usuario.rolAsignado === 'RESPONSABLESEDE'">
+        <td>1</td>
+        <td>E.T.S.I Informática</td>
+        <td>Bulevar Louis Pastel</td>
+        <td>Universidad</td>
+        <td>
+          <!--Funcionalidad con microservicio de gestor de vigilantes-->
+          <button (click)="verDetallesUsuario(usuario.id)" class="css-button-3d--blue">Editar</button>
+          <button *ngIf="!usuario.confirmacionEliminacion" (click)="usuario.confirmacionEliminacion = true" class="css-button-3d--gray" style="margin-left: 10px">Eliminar</button>
+
+          <div *ngIf="usuario.confirmacionEliminacion" class="confirmacion-eliminacion">
+            <p>¿Estás seguro que deseas eliminar a {{ usuario.nombre }}?</p>
+            <button (click)="eliminarUsuario(usuario.id); usuario.confirmacionEliminacion = false" class="css-button-3d--gray">Sí, eliminar</button>
+            <button (click)="usuario.confirmacionEliminacion = false" class="css-button-3d--blue">Cancelar</button>
+          </div>
+
+        </td>
+      </ng-container>
+    </tr>
+  </tbody>
+</table>
+
+  </ng-container>
+
+
+
+
+</div>

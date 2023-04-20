@@ -31,6 +31,7 @@ export class DashboardComponent implements OnInit {
     this.loginService.getAllUser().subscribe(
       (usuarios: User[]) => {
         this.usuarios = usuarios;
+
       },
       (error) => {
         console.log(error);
@@ -45,7 +46,7 @@ export class DashboardComponent implements OnInit {
     if (this.terminoBusqueda && this.terminoBusqueda.trim()) {
       this.resultados = this.usuarios.filter((usuario) => {
         const termino = this.terminoBusqueda.toLowerCase();
-        return usuario.nombre.toLowerCase().includes(termino) || usuario.apellido.toLowerCase().includes(termino) || usuario.rolAsignado.toLowerCase().includes(termino) ;
+        return usuario.nombre.toLowerCase().includes(termino) ;
       });
     } else {
       this.resultados = [];
@@ -86,9 +87,10 @@ export class DashboardComponent implements OnInit {
   activarConfirmacionEliminacion() {
     this.confirmacionEliminacion = true;
   }
-
+  abierto: boolean = false;
   alternarTablaUsuario(): void {
     this.mostrarTablaUsuarios = !this.mostrarTablaUsuarios;
+    this.abierto = !this.abierto;
   }
 
   alternarTablaVigilantes():void{

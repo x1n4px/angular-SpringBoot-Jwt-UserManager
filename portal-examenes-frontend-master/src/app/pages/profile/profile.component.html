@@ -14,13 +14,10 @@
             <div class="datos">
             <p><strong style="font-weight: bold;">Email: </strong> {{ usuarioActual.email}}</p>
             <p><strong style="font-weight: bold;">Username:</strong> {{usuarioActual.username}}</p>
-            <p><strong style="font-weight: bold;">Name:</strong>{{usuarioActual.nombre}}</p>
-            <p><strong style="font-weight: bold;">Surname:</strong> {{usuarioActual.apellido}}</p>
-            <p><strong style="font-weight: bold;">Telefone:</strong> {{usuarioActual.telefono}}</p>
-          </div>
+            <p><strong style="font-weight: bold;">Nombre:</strong>{{usuarioActual.nombre}} {{usuarioActual.apellido1}} {{usuarioActual.apellido2}}</p>
+           </div>
             <div class = "container text-center">
-              <a mat-raised-button color="primary" href = "/change-password-after-login">Cambiar la contraseña</a>
-              <button (click)="changePages()"  mat-raised-button color="primary" href="/user-dashboard">Menu</button>
+               <button (click)="changePages()"  mat-raised-button color="primary" href="/user-dashboard">Menu</button>
 
 
             </div>

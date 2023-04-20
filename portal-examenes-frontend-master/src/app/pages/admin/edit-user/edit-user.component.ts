@@ -22,8 +22,6 @@ export class EditUserComponent implements OnInit {
   }
 
   guardarUsuario(){
-    console.log(this.id);
-    console.log(this.usuario);
     this.loginService.actualizarUsuario(this.id, this.usuario).subscribe(dato => {
       this.router.navigate(['admin']);
     })

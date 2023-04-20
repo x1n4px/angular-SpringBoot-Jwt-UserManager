@@ -24,32 +24,32 @@ export class LoginService {
 
   //generamos el token
   public generateToken(loginData:any){
-    return this.http.post(`${baserUrl}/generate-token`,loginData);
+    return this.http.post(`http://localhost:8080/login`,loginData);
   }
 
   public getCurrentUser(){
-    return this.http.get(`${baserUrl}/user/actual`);
+    return this.http.get(`${baserUrl}/usuario/actual`);
   }
 
   public getAllUser(){
-    return this.http.get<User[]>(`${baserUrl}/user/todos`);
+    return this.http.get<User[]>(`${baserUrl}/usuarios`);
   }
 
   eliminarUsuario(id:number): Observable<Object>{
-    return this.http.delete(`${baserUrl}/user/eliminarUsuario/${id}`);  }
+    return this.http.delete(`http://localhost:8080/usuarios/${id}`);  }
 
 
   changePassword(email: string, currentPassword: string, newPassword: string): Observable<any>{
     const body = {email, currentPassword, newPassword};
-    return this.http.post<any>("http://localhost:8080/user/perfil/cambiarClave", body);
+    return this.http.post<any>("http://localhost:8080/passwordreset", body);
   }
 
   obtenerUsuarioPorId(id:number):Observable<User>{
-    return this.http.get<User>(`${this.gUURL}/${id}`);
+    return this.http.get<User>(`http://localhost:8080/usuarios/${id}`);
   }
 
   actualizarUsuario(id:number, usuario:User) : Observable<Object>{
-    return this.http.put(`${this.gUURL}/${id}`, usuario);
+    return this.http.put(`http://localhost:8080/usuarios/${id}`, usuario);
   }
 
 

@@ -11,7 +11,7 @@ import { Component, OnInit } from '@angular/core';
 export class LoginComponent implements OnInit {
 
   loginData = {
-    "username" : '',
+    "email" : '',
     "password" : '',
   }
 
@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
   }
 
   formSubmit(){
-    if(this.loginData.username.trim() == '' || this.loginData.username.trim() == null){
+    if(this.loginData.email.trim() == '' || this.loginData.email.trim() == null){
       this.snack.open('El nombre de usuario es requerido !!','Aceptar',{
         duration:3000
       })
@@ -37,8 +37,7 @@ export class LoginComponent implements OnInit {
 
     this.loginService.generateToken(this.loginData).subscribe(
       (data:any) => {
-        console.log(data);
-        this.loginService.loginUser(data.token);
+         this.loginService.loginUser(data.token);
         this.loginService.getCurrentUser().subscribe((user:any) => {
           this.loginService.setUser(user);
           console.log(user);

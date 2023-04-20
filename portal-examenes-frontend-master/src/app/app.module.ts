@@ -23,8 +23,7 @@ import { authInterceptorProviders } from './services/auth.interceptor';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
 import { UserDashboardComponent } from './pages/user/user-dashboard/user-dashboard.component';
 import { ProfileComponent } from './pages/profile/profile.component';
-import { ChangePasswordAfterLoginComponent } from './pages/change-password-after-login/change-password-after-login.component';
-import { ChangePassNoLoginComponent } from './pages/change-pass-no-login/change-pass-no-login.component';
+ import { ChangePassNoLoginComponent } from './pages/change-pass-no-login/change-pass-no-login.component';
 import { EditUserComponent } from './pages/admin/edit-user/edit-user.component';
 
 @NgModule({
@@ -37,8 +36,7 @@ import { EditUserComponent } from './pages/admin/edit-user/edit-user.component';
     DashboardComponent,
     UserDashboardComponent,
     ProfileComponent,
-    ChangePasswordAfterLoginComponent,
-    ChangePassNoLoginComponent,
+     ChangePassNoLoginComponent,
     EditUserComponent
   ],
   imports: [
